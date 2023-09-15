@@ -1,12 +1,8 @@
-import java.util.Arrays;
-
 public class Minesweeper {
-   public static void main(String[] args) {
+    public static void main(String[] args) {
 
-      MinesweeperWindows mw = new MinesweeperWindows();
-      //调用showDialog方法，显示选项对话框
+        MinesweeperWindows mw = new MinesweeperWindows();
 
-      mw.executeDifficultChoice();
-   }
-
+        mw.executeDifficultChoice();
+    }
 }
