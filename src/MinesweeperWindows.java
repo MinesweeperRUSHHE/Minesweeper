@@ -12,12 +12,67 @@ public class MinesweeperWindows {
         switch (new DifficultyChoice().getDifficulty()) {
             case 0 -> executeMinesweeper(new boolean[9][9], 10);
             case 1 -> executeMinesweeper(new boolean[16][16], 40);
-            case 2 -> executeMinesweeper(new boolean[16][30], 90);
+            case 2 -> executeMinesweeper(new boolean[16][30], 99);
             //TODO:新建一个窗口选择自定义大小，未实现
-            case 3 -> System.out.println("此功能未完成");
+            case 3 -> CustomDifficulty();
             //TODO:确认这里直接结束程序是否合适
             default -> System.exit(0);
         }
+    }
+
+    public void CustomDifficulty() {
+        /*
+        showInputDialog获取用户输入的数据
+        Integer转换为整数
+         */
+        String High = JOptionPane.showInputDialog(null, "请输入高度");
+        while (check(High)){
+            High = reEnter();
+        }
+        int high = Integer.parseInt(High);
+
+        String Wide = JOptionPane.showInputDialog(null, "请输入宽度");
+        while (check(Wide)){
+            Wide = reEnter();
+        }
+        int wide = Integer.parseInt(Wide);
+
+        String Mine = JOptionPane.showInputDialog(null, "请输入雷数");
+        while (check(Mine)){
+            Mine = reEnter();
+        }
+        int mine = Integer.parseInt(Mine);
+
+        executeMinesweeper(new boolean[high][wide], mine);
+    }
+
+    public boolean check(String date){
+        //检查用户操作和判断输入数据
+        if (date == null) {
+            //用户关闭或取消了对话框
+            JOptionPane.showMessageDialog(null, "你取消了自定义");
+            //重新回到难度选择
+            MinesweeperWindows mw = new MinesweeperWindows();
+            mw.executeDifficultChoice();
+            return false;
+        }
+        else{
+            try {
+                //判断输入的是否为整数
+                Integer.parseInt(date);
+                //判断整数的大小是否符合要求
+                return 8 >= Integer.parseInt(date) || Integer.parseInt(date) >= 30;
+            } catch (Exception e) {
+                //不是整数
+                return true;
+            }
+        }
+
+    }
+    public String reEnter(){
+        //如果输入的不是符合要求的整数，发出警告并要求重新输入
+        JOptionPane.showMessageDialog(null, "请输入9~30的整数", "Title",JOptionPane.WARNING_MESSAGE);
+        return JOptionPane.showInputDialog(null, "请重新输入");
     }
 
     public void executeMinesweeper(boolean[][] mines, int numbers) {
@@ -77,7 +132,7 @@ public class MinesweeperWindows {
             frame.setLayout(new BorderLayout()); // 设置边框布局管理器
             frame.add(new JButton("重新开始"), BorderLayout.NORTH); // 添加一个按钮到北区域
             JPanel panel = new JPanel(); // 创建一个面板
-            panel.setLayout(new GridLayout(rows, columns)); // 设置网格布局管理器，3行3列
+            panel.setLayout(new GridLayout(rows, columns)); // 设置网格布局管理器
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < columns; j++) {
                     panel.add(minesweeperButton[i][j]);

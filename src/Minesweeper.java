@@ -4,5 +4,6 @@ public class Minesweeper {
         MinesweeperWindows mw = new MinesweeperWindows();
 
         mw.executeDifficultChoice();
+
     }
 }
