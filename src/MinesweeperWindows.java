@@ -173,20 +173,33 @@ public class MinesweeperWindows {
         }
 
         public void executeMinesweeper() {
-            JFrame frame = new JFrame("扫雷");
-            frame.setLayout(new BorderLayout()); // 设置边框布局管理器
-            frame.add(new JButton("重新开始"), BorderLayout.NORTH); // 重新开始按钮
-            JPanel panel = new JPanel(); // 放置地雷的面板
-            panel.setLayout(new GridLayout(rows, columns)); // 使用网格布局管理器管理地雷按钮
+            JFrame minesWeeper = new JFrame("扫雷");
+            minesWeeper.setLayout(new BorderLayout()); // 设置边框布局管理器
+
+            JPanel statusPanel = new JPanel(); // 显示状态的面板
+            JPanel minesPanel = new JPanel(); // 放置地雷的面板
+
+            JButton restartButton = new JButton("重新开始");
+            MinesTimer timer = new MinesTimer();
+
+            statusPanel.setLayout(new BorderLayout());
+            minesPanel.setLayout(new GridLayout(rows, columns)); // 使用网格布局管理器管理地雷按钮
+
+            statusPanel.add(timer, BorderLayout.EAST);
+            statusPanel.add(restartButton, BorderLayout.CENTER);
+
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < columns; j++) {
-                    panel.add(minesweeperButton[i][j]);
+                    minesPanel.add(minesweeperButton[i][j]);
                 }
             }
-            frame.add(panel, BorderLayout.CENTER); // 将地雷面板添加到中心区域
-            frame.pack(); // 设置自动窗口大小
-            frame.setVisible(true); // 设置窗口可见
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 设置窗口关闭方式
+
+            minesWeeper.add(statusPanel, BorderLayout.NORTH); // 将状态面板添加到上部区域
+            minesWeeper.add(minesPanel, BorderLayout.CENTER); // 将地雷面板添加到中心区域
+
+            minesWeeper.pack(); // 设置自动窗口大小
+            minesWeeper.setVisible(true); // 设置窗口可见
+            minesWeeper.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 设置窗口关闭方式
         }
 
         public void setMatrix(boolean[][] matrix) {
@@ -206,5 +219,19 @@ public class MinesweeperWindows {
 
     public int getMines() {
         return mines;
+    }
+}
+
+class MinesTimer extends JLabel {
+    public MinesTimer() {
+        super("000", JLabel.CENTER); // 创建一个居中显示0的标签
+        super.setFont(new Font("Arial", Font.BOLD, 20)); // 设置标签的字体为Arial，粗体，20号
+        super.setForeground(Color.RED); // 设置标签的前景色为红色
+
+        int seconds = 0; // 定义一个变量用于存储秒数
+    }
+
+    public void startMinesTimer() {
+        //未完成，请勿使用
     }
 }
