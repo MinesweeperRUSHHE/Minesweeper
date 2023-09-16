@@ -141,6 +141,19 @@ public class MinesweeperWindows {
         }
     }
 
+    /*
+    TODO:主窗口需要添加菜单栏（暂定是以下内容）
+    游戏        帮助
+    开局        关于
+
+    初级
+    中级
+    高级
+    自定义
+
+    扫雷英雄榜（基本完成了再写）
+    退出
+     */
     static class MainWindows {
         private final boolean[][] mines;
         private final MinesweeperButton[][] minesweeperButton;

@@ -11,6 +11,11 @@ public class MinesweeperButton extends JButton {
         //添加按钮的点击事件，可以根据自己的逻辑来实现
         this.addActionListener(e -> {
             //TODO: 按钮被点击时要执行的操作,如果是雷就全部爆炸，如果为空，如果周围有雷，显示雷的数量
+            if (!status) {
+                showNearbyMines();
+            } else {
+                System.exit(0);//实验用，目标是让所有雷爆炸
+            }
         });
     }
 
@@ -20,6 +25,11 @@ public class MinesweeperButton extends JButton {
 
     public void setMinesVisible(boolean minesVisible) {
         this.minesVisible = minesVisible;
+    }
+
+    //一个一个一个查看附近有多少雷的方法
+    public void showNearbyMines() {
+
     }
 }
 
