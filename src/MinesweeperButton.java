@@ -16,14 +16,14 @@ public class MinesweeperButton extends JButton {
         } else {
             this.status = calculateNearbyMines(status);
         }
-        super.setText(String.valueOf(this.status));
         //添加按钮的点击事件，可以根据自己的逻辑来实现
         this.addActionListener(e -> {
             //TODO: 按钮被点击时要执行的操作,如果是雷就全部爆炸，如果为空，如果周围有雷，显示雷的数量
             if (this.status != -1) {
-
+                super.setText(String.valueOf(this.status));
             } else {
-                System.exit(0);//实验用，目标是让所有雷爆炸
+                super.setText("*");
+                super.setEnabled(false);
             }
         });
     }
