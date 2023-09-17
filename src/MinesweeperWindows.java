@@ -39,15 +39,36 @@ public class MinesweeperWindows {
         }
     }
 
+    public void executeMinesweeper(boolean[][] mines, int numbers) {
+        placeMines(mines, numbers);//在此处使用随机布雷方法
+        new MainWindows(mines).executeMinesweeper();
+    }
+
+    private void placeMines(boolean[][] mines, int numbers) {
+        //TODO:写一个布雷的算法，就是把布尔数组的false变成true，numbers表示布雷的数量
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getMines() {
+        return mines;
+    }
+
     /*
     showInputDialog获取用户输入的数据
     Integer转换为整数
      */
     static class CustomDifficulty {
 
-        private int height;
-        private int width;
-        private int mines;
+        private final int height;
+        private final int width;
+        private final int mines;
 
         public CustomDifficulty() {
             String High = JOptionPane.showInputDialog(null, "请输入高度");
@@ -90,6 +111,7 @@ public class MinesweeperWindows {
                 }
             }
         }
+
         private String reEnterNumbers() {
             //如果输入的不是符合要求的整数，发出警告并要求重新输入
             JOptionPane.showMessageDialog(null, "请输入9~30的整数", "Title", JOptionPane.WARNING_MESSAGE);
@@ -107,15 +129,6 @@ public class MinesweeperWindows {
         public int getMines() {
             return mines;
         }
-    }
-
-    public void executeMinesweeper(boolean[][] mines, int numbers) {
-        placeMines(mines, numbers);//在此处使用随机布雷方法
-        new MainWindows(mines).executeMinesweeper();
-    }
-
-    private void placeMines(boolean[][] mines, int numbers) {
-        //TODO:写一个布雷的算法，就是把布尔数组的false变成true，numbers表示布雷的数量
     }
 
     static class DifficultyChoice {
@@ -167,7 +180,7 @@ public class MinesweeperWindows {
             minesweeperButton = new MinesweeperButton[rows][columns];
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < columns; j++) {
-                    minesweeperButton[i][j] = new MinesweeperButton(mines[i][j]);
+                    minesweeperButton[i][j] = new MinesweeperButton(i, j, mines);
                 }
             }
         }
@@ -207,18 +220,6 @@ public class MinesweeperWindows {
             rows = matrix.length;
             columns = matrix[0].length;
         }
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getMines() {
-        return mines;
     }
 }
 
