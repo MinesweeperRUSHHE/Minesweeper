@@ -53,8 +53,8 @@ public class MinesweeperWindows {
             int rr = r.nextInt(mines.length);
             int cc = r.nextInt(mines[0].length);
             //判断当前雷是否有重复，没有就安雷
-            if(mines[rr][cc] != false){
-                mines[rr][cc] = false;
+            if(mines[rr][cc] != true){
+                mines[rr][cc] = true;
                 numbers = numbers - 1;
             }
         }
