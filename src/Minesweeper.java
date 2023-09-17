@@ -1,13 +1,11 @@
-import java.util.Arrays;
-
 public class Minesweeper {
-   public static void main(String[] args) {
+    public static void main(String[] args) {
 
-      MinesweeperWindows mw = new MinesweeperWindows();
-      //调用showDialog方法，显示选项对话框
+        MinesweeperWindows mw = new MinesweeperWindows();
 
-      System.out.println(Arrays.deepToString(mw.getDifficultChoice()));
-
-   }
-
+        mw.executeDifficultChoice();
+        boolean[][] test = {{true, true, false}, {false, false, true}, {false, true, false}};
+        mw.executeMinesweeper(test, 4);
+//        mw.executeMinesweeper(new boolean[mw.getHeight()][mw.getWidth()], mw.getMines());
+    }
 }
