@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.util.*;
 
 public class MinesweeperWindows {
 
@@ -21,8 +22,25 @@ public class MinesweeperWindows {
         };
     }
 
+    //TODO:写一个布雷的算法，就是把布尔数组的false变成true，numbers表示布雷的数量
     private void placeMines(boolean[][] mines, int numbers) {
-        //TODO:写一个布雷的算法，就是把布尔数组的false变成true，numbers表示布雷的数量
+        Random r = new Random();
+        while (numbers>0){
+            //随机产生雷所在行、所在列
+            int rr = r.nextInt(mines.length);
+            int cc = r.nextInt(mines[0].length);
+            //判断当前雷是否有重复，没有就安雷
+            if(mines[rr][cc] != false){
+                mines[rr][cc] = false;
+                numbers = numbers - 1;
+            }
+            for (int i = 0; i < mines.length; i++) {
+                for (int j = 0; j < mines[i].length; j++) {
+                    System.out.print(mines[i][j]+" ");
+                }
+                System.out.println();
+            }
+        }
     }
     static class DifficultyChoice {
 
