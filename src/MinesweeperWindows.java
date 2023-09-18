@@ -1,9 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Random;
 
 public class MinesweeperWindows {
-
+    private static JFrame minesWeeper;
     private int height;
     private int width;
     private int mines;
@@ -67,7 +70,7 @@ public class MinesweeperWindows {
         return width;
     }
 
-    public int getMines() {
+    public  int getMines() {
         return mines;
     }
 
@@ -106,9 +109,8 @@ public class MinesweeperWindows {
             if (number == null) {
                 //用户关闭或取消了对话框
                 JOptionPane.showMessageDialog(null, "你取消了自定义");
-                //重新回到难度选择
-                MinesweeperWindows mw = new MinesweeperWindows();
-                mw.executeDifficultChoice();
+                //重新回到难度选择(有bug，有时间再改)
+                System.exit(0);
                 return false;
             } else {
                 try {
@@ -125,7 +127,7 @@ public class MinesweeperWindows {
 
         private String reEnterNumbers() {
             //如果输入的不是符合要求的整数，发出警告并要求重新输入
-            JOptionPane.showMessageDialog(null, "请输入9~30的整数", "Title", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "请输入9~30的整数", "WARNING", JOptionPane.WARNING_MESSAGE);
             return JOptionPane.showInputDialog(null, "请重新输入");
         }
 
@@ -165,6 +167,94 @@ public class MinesweeperWindows {
         }
     }
 
+    static class CreatMenu extends Frame {
+        JMenuBar menuBar;
+       public CreatMenu(){
+           menuBar = new JMenuBar();// 创建菜单栏对象
+
+           JMenu menu1 = new JMenu("游戏");// 创建菜单对象
+           menuBar.add(menu1);
+
+           JMenu sonMenu = new JMenu("开局");// 创建菜单的子菜单对象
+           menu1.add(sonMenu);
+
+           JMenuItem menuItem1_1 = new JMenuItem("初级");// 创建子菜单的菜单项对象
+           sonMenu.add(menuItem1_1);
+
+           JMenuItem menuItem1_2 = new JMenuItem("中级");
+           sonMenu.add(menuItem1_2);
+
+           JMenuItem menuItem1_3 = new JMenuItem("高级");
+           sonMenu.add(menuItem1_3);
+
+           JMenuItem menuItem1_4 = new JMenuItem("自定义");
+           sonMenu.add(menuItem1_4);
+
+           JMenu menu2 = new JMenu("帮助");
+           menuBar.add(menu2);
+
+           JMenuItem menuItem2 = new JMenuItem("关于");
+           menu2.add(menuItem2);
+
+
+
+           //为菜单项添加事件监听器
+           class Item1_1Listener implements ActionListener {
+               @Override
+               public void actionPerformed(ActionEvent arg0) {
+                   //关闭原窗口
+                   minesWeeper.dispose();
+                   //打开新窗口
+                   new MinesweeperWindows().executeMinesweeper(new boolean[9][9],10);
+               }
+           }
+           menuItem1_1.addActionListener(new Item1_1Listener());
+           class Item1_2Listener implements ActionListener {
+               @Override
+               public void actionPerformed(ActionEvent arg0) {
+                   minesWeeper.dispose();
+                   new MinesweeperWindows().executeMinesweeper(new boolean[16][16],40);
+               }
+           }
+           menuItem1_2.addActionListener(new Item1_2Listener());
+           class Item1_3Listener implements ActionListener {
+               @Override
+               public void actionPerformed(ActionEvent arg0) {
+                   minesWeeper.dispose();
+                   new MinesweeperWindows().executeMinesweeper(new boolean[16][30],99);
+               }
+           }
+           menuItem1_3.addActionListener(new Item1_3Listener());
+           class Item1_4Listener implements ActionListener {
+               @Override
+               public void actionPerformed(ActionEvent arg0) {
+                   minesWeeper.dispose();
+                   new CustomDifficulty();
+                   JOptionPane.showMessageDialog(null, "自定义功能暂未完善");
+                   /*
+                   TODO:完善自定义开局功能
+                    new MinesweeperWindows().executeMinesweeper(new boolean[getHeight()][getWidth()], getMines());
+                    bug：getMines()无法使用？
+                   */
+               }
+           }
+           menuItem1_4.addActionListener(new Item1_4Listener());
+           class Item2Listener implements ActionListener {
+               @Override
+               public void actionPerformed(ActionEvent arg0) {
+                   //TODO:完善"关于"
+                   JOptionPane.showMessageDialog(null, "看到这条信息的人奖励2h原神");
+
+               }
+           }
+           menuItem2.addActionListener(new Item2Listener());
+           System.out.print("创建菜单");
+       }
+       public JMenuBar getJMenuBar(){
+           return menuBar;
+       }
+
+    }
     /*
     TODO:主窗口需要添加菜单栏（暂定是以下内容）
     游戏        帮助
@@ -197,9 +287,10 @@ public class MinesweeperWindows {
         }
 
         public void executeMinesweeper() {
-            JFrame minesWeeper = new JFrame("扫雷");
+            minesWeeper = new JFrame("扫雷");
+            CreatMenu menu = new CreatMenu();//创建菜单
+            minesWeeper.setJMenuBar(menu.getJMenuBar());
             minesWeeper.setLayout(new BorderLayout()); // 设置边框布局管理器
-
             JPanel statusPanel = new JPanel(); // 显示状态的面板
             JPanel minesPanel = new JPanel(); // 放置地雷的面板
 
@@ -208,7 +299,6 @@ public class MinesweeperWindows {
 
             statusPanel.setLayout(new BorderLayout());
             minesPanel.setLayout(new GridLayout(rows, columns)); // 使用网格布局管理器管理地雷按钮
-
             statusPanel.add(timer, BorderLayout.EAST);
             statusPanel.add(restartButton, BorderLayout.CENTER);
 
