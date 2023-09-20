@@ -48,15 +48,15 @@ public class MinesweeperWindows {
     }
 
     private void placeMines(boolean[][] mines, int numbers) {
-        Random r = new Random();
+        Random random = new Random();
         while (numbers > 0) {
             //随机产生雷所在行、所在列
-            int rr = r.nextInt(mines.length);
-            int cc = r.nextInt(mines[0].length);
+            int rows = random.nextInt(mines.length);
+            int columns = random.nextInt(mines[0].length);
             //判断当前雷是否有重复，没有就安雷
-            if (!mines[rr][cc]) {
-                mines[rr][cc] = true;
-                numbers = numbers - 1;
+            if (!mines[rows][columns]) {
+                mines[rows][columns] = true;
+                numbers -= 1;
             }
         }
     }
