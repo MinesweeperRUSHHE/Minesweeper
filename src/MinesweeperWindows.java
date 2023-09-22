@@ -176,33 +176,29 @@ public class MinesweeperWindows {
         public Menu() {
             menuBar = new JMenuBar();// 创建菜单栏对象
 
-            JMenu menu1 = new JMenu("游戏");// 创建菜单对象
-            menuBar.add(menu1);
+            JMenu menuGames = new JMenu("游戏");// 创建菜单对象
+            JMenu menuHelps = new JMenu("帮助");
 
             JMenuItem menuItem1_5 = new JMenuItem("开局");// 创建子菜单的菜单项对象
-            menu1.add(menuItem1_5);
-
             JMenuItem menuItem1_1 = new JMenuItem("初级");
-            menu1.add(menuItem1_1);
-
             JMenuItem menuItem1_2 = new JMenuItem("中级");
-            menu1.add(menuItem1_2);
-
             JMenuItem menuItem1_3 = new JMenuItem("高级");
-            menu1.add(menuItem1_3);
-
             JMenuItem menuItem1_4 = new JMenuItem("自定义");
-            menu1.add(menuItem1_4);
-
             JMenuItem menuItem1_6 = new JMenuItem("重新开始这一局");
-            menu1.add(menuItem1_6);
-
-            JMenu menu2 = new JMenu("帮助");
-            menuBar.add(menu2);
-
             JMenuItem menuItem2_1 = new JMenuItem("关于");
-            menu2.add(menuItem2_1);
+            
+            menuGames.add(menuItem1_5);
+            menuGames.addSeparator();
+            menuGames.add(menuItem1_1);
+            menuGames.add(menuItem1_2);
+            menuGames.add(menuItem1_3);
+            menuGames.add(menuItem1_4);
+            menuGames.addSeparator();
+            menuGames.add(menuItem1_6);
+            menuHelps.add(menuItem2_1);
 
+            menuBar.add(menuGames);
+            menuBar.add(menuHelps);
 
             //为菜单项添加事件监听器
             class Item1_5Listener implements ActionListener {
