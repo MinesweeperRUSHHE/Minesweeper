@@ -5,15 +5,19 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Random;
+import java.util.Timer;
 
 public class MinesweeperWindows {
-    private static JFrame minesweeper;
+    public static JLabel timer_1;
+    public static JLabel timer_2;
+    public static JLabel timer_3;
+    public static MinesTimer minesTimer;
     static JButton FaceButton;
+    private static JFrame minesweeper;
     private static MinesweeperButton[][] minesweeperButton;
     private static int height;
     private static int width;
     private static int mines;
-
 
     public void executeDifficultChoice() {
         /*
@@ -186,7 +190,7 @@ public class MinesweeperWindows {
             JMenuItem menuItem1_4 = new JMenuItem("自定义");
             JMenuItem menuItem1_6 = new JMenuItem("重新开始这一局");
             JMenuItem menuItem2_1 = new JMenuItem("关于");
-            
+
             menuGames.add(menuItem1_5);
             menuGames.addSeparator();
             menuGames.add(menuItem1_1);
@@ -204,6 +208,7 @@ public class MinesweeperWindows {
             class Item1_5Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
+                    minesTimer.stop();
                     minesweeper.dispose();
                     new MinesweeperWindows().executeMinesweeper(new boolean[MinesweeperWindows.height][MinesweeperWindows.width], MinesweeperWindows.mines);
                 }
@@ -212,6 +217,8 @@ public class MinesweeperWindows {
             class Item1_1Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
+                    //关闭计时器
+                    minesTimer.stop();
                     //关闭原窗口
                     minesweeper.dispose();
                     //修改数据
@@ -226,6 +233,7 @@ public class MinesweeperWindows {
             class Item1_2Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
+                    minesTimer.stop();
                     minesweeper.dispose();
                     height = 16;
                     width = 16;
@@ -237,6 +245,7 @@ public class MinesweeperWindows {
             class Item1_3Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
+                    minesTimer.stop();
                     minesweeper.dispose();
                     height = 16;
                     width = 30;
@@ -248,6 +257,7 @@ public class MinesweeperWindows {
             class Item1_4Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
+                    minesTimer.stop();
                     minesweeper.dispose();
                     CustomDifficulty customDifficulty = new CustomDifficulty();
                     new MinesweeperWindows().executeMinesweeper(new boolean[customDifficulty.getHeight()][customDifficulty.getWidth()], customDifficulty.getMines());
@@ -257,18 +267,19 @@ public class MinesweeperWindows {
             class Item1_6Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
+                    //关闭计时器
+                    minesTimer.stop();
                     //遍历所有格子，将他们设置为初始状态
-                    int i,j;
-                    for(i = 0;i<MinesweeperWindows.height;i++){
-                        for(j = 0;j<MinesweeperWindows.width;j++){
+                    int i, j;
+                    for (i = 0; i < MinesweeperWindows.height; i++) {
+                        for (j = 0; j < MinesweeperWindows.width; j++) {
                             minesweeperButton[i][j].setIcon(new ImageIcon("./src/Themes/Classic/Button.png"));
-                            /*TODO:
-                            将格子设置成未打开状态
-                            将剩余雷数归零
-                            将计时器归零
-                             */
                         }
                     }
+                    /*TODO:
+                    将格子设置成未打开状态
+                    将剩余雷数归零
+                    */
                 }
 
             }
@@ -318,35 +329,51 @@ public class MinesweeperWindows {
         }
 
         public void executeMinesweeper() {
+
             minesweeper = new JFrame("扫雷");
             minesweeper.setJMenuBar(new Menu().getJMenuBar());
             minesweeper.setLayout(new BorderLayout()); // 设置边框布局管理器
             JPanel statusPanel = new JPanel(); // 显示状态的面板
             JPanel minesPanel = new JPanel(); // 放置地雷的面板
+            JPanel timePanel = new JPanel(); //计时器面板//////////
 
             FaceButton = new JButton();//添加笑脸按钮
             FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_smile.png"));//初始为微笑
             FaceButton.addMouseListener(new FaceButtonListener());//为笑脸按钮添加鼠标监视器
+            //创建三个计时器面板
+            timer_1 = new JLabel();
+            timer_2 = new JLabel();
+            timer_3 = new JLabel();
 
-            MinesTimer timer = new MinesTimer();
-
-            statusPanel.setLayout(new BorderLayout());
+            statusPanel.setLayout(new BorderLayout()); // 设置边框布局管理器
             minesPanel.setLayout(new GridLayout(rows, columns)); // 使用网格布局管理器管理地雷按钮
-            statusPanel.add(timer, BorderLayout.EAST);
-            statusPanel.add(FaceButton, BorderLayout.CENTER);
+            statusPanel.add(timePanel, BorderLayout.EAST); //计时器面板添加到状态面板右侧
+            statusPanel.add(FaceButton);//笑脸添加到状态面板中
 
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < columns; j++) {
                     minesPanel.add(minesweeperButton[i][j]);
                 }
             }
-
             minesweeper.add(statusPanel, BorderLayout.NORTH); // 将状态面板添加到上部区域
             minesweeper.add(minesPanel, BorderLayout.CENTER); // 将地雷面板添加到中心区域
+
+            //计时器区域添加到计时器面板
+            timePanel.add(timer_1);
+            timePanel.add(timer_2);
+            timePanel.add(timer_3);
+
+
+            //计时器初始图片为0
+            timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Timer_0.png"));
+            timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Timer_0.png"));
+            timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Timer_0.png"));
+
             minesweeper.pack(); // 设置自动窗口大小
             minesweeper.setLocationRelativeTo(null); // 设置窗口居中
             minesweeper.setVisible(true); // 设置窗口可见
             minesweeper.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 设置窗口关闭方式
+            MinesTimer.firstClick = true;
         }
 
         public void setMatrix(boolean[][] matrix) {
@@ -354,14 +381,18 @@ public class MinesweeperWindows {
             rows = matrix.length;
             columns = matrix[0].length;
         }
+
+
         //笑脸按钮鼠标监听器
         static class FaceButtonListener implements MouseListener {
             //点击时重新开始游戏
             @Override
             public void mouseClicked(MouseEvent e) {
+                minesTimer.stop();
                 minesweeper.dispose();
                 new MinesweeperWindows().executeMinesweeper(new boolean[MinesweeperWindows.height][MinesweeperWindows.width], MinesweeperWindows.mines);
             }
+
             @Override
             public void mousePressed(MouseEvent e) {
                 FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_smile_clicked.png"));
@@ -383,21 +414,9 @@ public class MinesweeperWindows {
             }
         }
     }
-}
 /*TODO:
 添加一个显示剩余雷数的区域
  */
 
-class MinesTimer extends JLabel {
-    public MinesTimer() {
-        super("000", JLabel.CENTER); // 创建一个居中显示0的标签
-        super.setFont(new Font("Arial", Font.BOLD, 20)); // 设置标签的字体为Arial，粗体，20号
-        super.setForeground(Color.RED); // 设置标签的前景色为红色
 
-        int seconds = 0; // 定义一个变量用于存储秒数
-    }
-
-    public void startMinesTimer() {
-        //未完成，请勿使用
-    }
 }

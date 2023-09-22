@@ -10,7 +10,7 @@ public class MinesweeperButton extends JButton {
     private boolean canFlag = true;
     private boolean belongToFlag = false;
     private boolean belongToQuestion = false;
-    private boolean minesVisible = false;//false为不可见，true为可见
+
     /*TODO:
     添加一个方法，每次点击鼠标时调用该方法改变笑脸状态
     添加一个表示游戏状态的标志，初始值为0
@@ -30,13 +30,15 @@ public class MinesweeperButton extends JButton {
     MouseListener mouseListener = new MouseListener() {
         @Override
         public void mouseClicked(MouseEvent e) {
-
-
+            if(MinesTimer.firstClick){
+                MinesweeperWindows.minesTimer = new MinesTimer(); //启动计时器
+                MinesTimer.firstClick = false;
+            }
         }
 
         @Override
         public void mousePressed(MouseEvent e) {
-            MinesweeperWindows.FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_astonished.png"));
+            MinesweeperWindows.FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_astonished.png")); //按下时为疑惑
         }
 
 
@@ -50,8 +52,9 @@ public class MinesweeperButton extends JButton {
                         canFlag = false;
                         clickable = false;
                         setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine_exploded.png"));
+                        // TODO:游戏失败
                         break;
-                        //TODO:游戏失败
+
                     case 0:
                         //空且附近地雷为0
                         canFlag = false;
@@ -65,8 +68,6 @@ public class MinesweeperButton extends JButton {
                         break;
                 }
                 //TODO:在此调用检查输赢的方法
-                //当鼠标抬起是变为笑脸
-                MinesweeperWindows.FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_smile.png"));
             }
             //右键点击
             else if (e.getButton() == MouseEvent.BUTTON3) {
@@ -82,7 +83,7 @@ public class MinesweeperButton extends JButton {
                     belongToFlag = false;
                     belongToQuestion = true;
                     clickable = false;
-                } else if (belongToQuestion){
+                } else if (belongToQuestion) {
                     setIcon(new ImageIcon("./src/Themes/Classic/Button.png"));
                     canFlag = true;
                     clickable = true;
@@ -93,6 +94,8 @@ public class MinesweeperButton extends JButton {
                 再次右键点击旗子将取消插旗
                 */
             }
+            //当鼠标抬起是变为笑脸
+            MinesweeperWindows.FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_smile.png"));
 
         }
 
@@ -106,6 +109,7 @@ public class MinesweeperButton extends JButton {
 
         }
     };
+    private boolean minesVisible = false;//false为不可见，true为可见
 
     public MinesweeperButton(int xLocation, int yLocation, boolean[][] status) {
         //调用JButton类的无参构造方法，创建一个没有文本或图标的按钮
