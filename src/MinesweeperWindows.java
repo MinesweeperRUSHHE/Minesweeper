@@ -207,7 +207,9 @@ public class MinesweeperWindows {
             class Item1_5Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                    minesTimer.stop();
+                    if(MinesweeperWindows.minesTimer != null) {
+                        minesTimer.stop();
+                    }
                     minesweeper.dispose();
                     new MinesweeperWindows().executeMinesweeper(new boolean[MinesweeperWindows.height][MinesweeperWindows.width], MinesweeperWindows.mines);
                 }
@@ -217,7 +219,9 @@ public class MinesweeperWindows {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
                     //关闭计时器
-                    minesTimer.stop();
+                    if(MinesweeperWindows.minesTimer != null) {
+                        minesTimer.stop();
+                    }
                     //关闭原窗口
                     minesweeper.dispose();
                     //修改数据
@@ -232,7 +236,9 @@ public class MinesweeperWindows {
             class Item1_2Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                    minesTimer.stop();
+                    if(MinesweeperWindows.minesTimer != null) {
+                        minesTimer.stop();
+                    }
                     minesweeper.dispose();
                     height = 16;
                     width = 16;
@@ -244,7 +250,9 @@ public class MinesweeperWindows {
             class Item1_3Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                    minesTimer.stop();
+                    if(MinesweeperWindows.minesTimer != null) {
+                        minesTimer.stop();
+                    }
                     minesweeper.dispose();
                     height = 16;
                     width = 30;
@@ -256,7 +264,9 @@ public class MinesweeperWindows {
             class Item1_4Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                    minesTimer.stop();
+                    if(MinesweeperWindows.minesTimer != null) {
+                        minesTimer.stop();
+                    }
                     minesweeper.dispose();
                     CustomDifficulty customDifficulty = new CustomDifficulty();
                     new MinesweeperWindows().executeMinesweeper(new boolean[customDifficulty.getHeight()][customDifficulty.getWidth()], customDifficulty.getMines());
@@ -267,7 +277,9 @@ public class MinesweeperWindows {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
                     //关闭计时器
-                    minesTimer.stop();
+                    if(MinesweeperWindows.minesTimer != null) {
+                        minesTimer.stop();
+                    }
                     //遍历所有格子，将他们设置为初始状态
                     int i, j;
                     for (i = 0; i < MinesweeperWindows.height; i++) {
@@ -383,7 +395,9 @@ public class MinesweeperWindows {
             //点击时重新开始游戏
             @Override
             public void mouseClicked(MouseEvent e) {
-                minesTimer.stop();
+                if(MinesweeperWindows.minesTimer != null) {
+                    minesTimer.stop();
+                }
                 minesweeper.dispose();
                 new MinesweeperWindows().executeMinesweeper(new boolean[MinesweeperWindows.height][MinesweeperWindows.width], MinesweeperWindows.mines);
             }

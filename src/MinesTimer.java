@@ -18,9 +18,7 @@ class MinesTimer {
         timer.schedule(timerTask,1000,1000);
     }
     public void stop(){
-        if(MinesweeperWindows.minesTimer != null) {
             timerTask.cancel();
-        }
     }
     //创建执行的任务
     TimerTask timerTask = new TimerTask() {
