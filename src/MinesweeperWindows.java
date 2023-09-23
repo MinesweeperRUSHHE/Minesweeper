@@ -342,11 +342,11 @@ public class MinesweeperWindows {
             minesweeper.setLayout(new BorderLayout()); // 设置边框布局管理器
             JPanel statusPanel = new JPanel(); // 显示状态的面板
             JPanel minesPanel = new JPanel(); // 放置地雷的面板
-            JPanel timePanel = new JPanel(); //计时器面板//////////
+            JPanel timePanel = new JPanel(); // 计时器面板
 
-            FaceButton = new JButton();//添加笑脸按钮
-            FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_smile.png"));//初始为微笑
-            FaceButton.addMouseListener(new FaceButtonListener());//为笑脸按钮添加鼠标监视器
+            FaceButton = new JButton(); // 添加笑脸按钮
+            FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_smile.png")); // 初始为微笑
+            FaceButton.addMouseListener(new FaceButtonListener()); // 为笑脸按钮添加鼠标监视器
             //创建三个计时器面板
             timer_1 = new JLabel();
             timer_2 = new JLabel();
@@ -354,9 +354,10 @@ public class MinesweeperWindows {
 
             statusPanel.setLayout(new BorderLayout()); // 设置边框布局管理器
             minesPanel.setLayout(new GridLayout(rows, columns)); // 使用网格布局管理器管理地雷按钮
-            statusPanel.add(timePanel, BorderLayout.EAST); //计时器面板添加到状态面板右侧
-            statusPanel.add(FaceButton);//笑脸添加到状态面板中
+            statusPanel.add(timePanel, BorderLayout.EAST); // 计时器面板添加到状态面板右侧
+            statusPanel.add(FaceButton); // 笑脸添加到状态面板中
 
+            //将地雷按钮添加到一个网格panel里
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < columns; j++) {
                     minesPanel.add(minesweeperButton[i][j]);
@@ -369,7 +370,6 @@ public class MinesweeperWindows {
             timePanel.add(timer_1);
             timePanel.add(timer_2);
             timePanel.add(timer_3);
-
 
             //计时器初始图片为0
             timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Timer_0.png"));
@@ -388,7 +388,6 @@ public class MinesweeperWindows {
             rows = matrix.length;
             columns = matrix[0].length;
         }
-
 
         //笑脸按钮鼠标监听器
         static class FaceButtonListener implements MouseListener {
