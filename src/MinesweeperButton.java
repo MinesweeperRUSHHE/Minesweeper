@@ -84,6 +84,7 @@ public class MinesweeperButton extends JButton {
                     clickable = false;
                 } else if (belongToQuestion) {
                     setIcon(new ImageIcon("./src/Themes/Classic/Button.png"));
+                    belongToQuestion = false;
                     canFlag = true;
                     clickable = true;
                 }
