@@ -26,42 +26,11 @@ class MinesTimer {
         public void run() {
             seconds++;
             //个位数变更
-            switch (seconds % 10) {
-                default -> MinesweeperWindows.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Timer_0.png"));
-                case 1 -> MinesweeperWindows.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Timer_1.png"));
-                case 2 -> MinesweeperWindows.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Timer_2.png"));
-                case 3 -> MinesweeperWindows.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Timer_3.png"));
-                case 4 -> MinesweeperWindows.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Timer_4.png"));
-                case 5 -> MinesweeperWindows.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Timer_5.png"));
-                case 6 -> MinesweeperWindows.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Timer_6.png"));
-                case 7 -> MinesweeperWindows.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Timer_7.png"));
-                case 8 -> MinesweeperWindows.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Timer_8.png"));
-                case 9 -> MinesweeperWindows.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Timer_9.png"));
-            }//十位数变更
-            switch (seconds / 10 % 10) {
-                default -> MinesweeperWindows.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Timer_0.png"));
-                case 1 -> MinesweeperWindows.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Timer_1.png"));
-                case 2 -> MinesweeperWindows.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Timer_2.png"));
-                case 3 -> MinesweeperWindows.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Timer_3.png"));
-                case 4 -> MinesweeperWindows.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Timer_4.png"));
-                case 5 -> MinesweeperWindows.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Timer_5.png"));
-                case 6 -> MinesweeperWindows.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Timer_6.png"));
-                case 7 -> MinesweeperWindows.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Timer_7.png"));
-                case 8 -> MinesweeperWindows.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Timer_8.png"));
-                case 9 -> MinesweeperWindows.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Timer_9.png"));
-            }//百位数变更
-            switch (seconds / 100 % 10) {
-                default -> MinesweeperWindows.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Timer_0.png"));
-                case 1 -> MinesweeperWindows.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Timer_1.png"));
-                case 2 -> MinesweeperWindows.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Timer_2.png"));
-                case 3 -> MinesweeperWindows.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Timer_3.png"));
-                case 4 -> MinesweeperWindows.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Timer_4.png"));
-                case 5 -> MinesweeperWindows.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Timer_5.png"));
-                case 6 -> MinesweeperWindows.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Timer_6.png"));
-                case 7 -> MinesweeperWindows.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Timer_7.png"));
-                case 8 -> MinesweeperWindows.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Timer_8.png"));
-                case 9 -> MinesweeperWindows.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Timer_9.png"));
-            }
+            MinesweeperWindows.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Timer_" + seconds % 10 + ".png"));
+            //十位数变更
+            MinesweeperWindows.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Timer_" + seconds / 10 % 10 + ".png"));
+            //百位数变更
+            MinesweeperWindows.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Timer_" + seconds / 100 % 10 + ".png"));
         }
     };
 }
