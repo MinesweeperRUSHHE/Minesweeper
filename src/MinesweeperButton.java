@@ -6,7 +6,8 @@ public class MinesweeperButton extends JButton {
     private final int status; // -1是雷，0-8为附近的雷数
     private final int xLocation;
     private final int yLocation;
-    private boolean clickable = true;
+    private boolean leftClickable = true;
+    private boolean rightClickable = true;
     private boolean canFlag = true;
     private boolean belongToFlag = false;
     private boolean belongToQuestion = false;
@@ -38,28 +39,31 @@ public class MinesweeperButton extends JButton {
 
         @Override
         public void mousePressed(MouseEvent e) {
-            MinesweeperWindows.FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_astonished.png")); //按下时为疑惑
+            if (leftClickable || rightClickable) {
+                MinesweeperWindows.FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_astonished.png")); //按下时为疑惑
+            }
         }
 
 
         @Override
         public void mouseReleased(MouseEvent e) {
             //左键点击
-            if (e.getButton() == MouseEvent.BUTTON1 && clickable) {
+            if (e.getButton() == MouseEvent.BUTTON1 && leftClickable) {
                 switch (status) {
                     case -1 -> {
-                        //点击后设置为爆炸的雷的图标
+                        //点击后设置为爆炸的雷的图标，并调用方法暂停计时器及引爆全部地雷
                         canFlag = false;
-                        clickable = false;
+                        leftClickable = false;
+                        rightClickable = false;
                         setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine_exploded.png"));
+                        MinesweeperWindows.minesTimer.stop();
+                        MinesweeperWindows.detonateAllMines(xLocation, yLocation);
                     }
-                    // TODO:游戏失败
                     case 0 -> {
                         //空且附近地雷为0
                         canFlag = false;
-                        clickable = false;
                         setIcon(new ImageIcon("./src/Themes/Classic/Button_0.png"));
-                        setEnabled(false);
+                        //TODO:需要一个翻开一片空格子的方法
                     }
                     default -> {
                         canFlag = false;
@@ -69,24 +73,24 @@ public class MinesweeperButton extends JButton {
                 //TODO:在此调用检查输赢的方法
             }
             //右键点击
-            else if (e.getButton() == MouseEvent.BUTTON3) {
+            else if (e.getButton() == MouseEvent.BUTTON3 && rightClickable) {
                 //旗子图标
                 if (canFlag) {
                     setIcon(new ImageIcon("./src/Themes/Classic/Button_flag.png"));
                     canFlag = false;
                     belongToFlag = true;
-                    clickable = false;
+                    leftClickable = false;
                 } else if (belongToFlag) {
                     setIcon(new ImageIcon("./src/Themes/Classic/Button_question.png"));
                     canFlag = false;
                     belongToFlag = false;
                     belongToQuestion = true;
-                    clickable = false;
+                    leftClickable = false;
                 } else if (belongToQuestion) {
                     setIcon(new ImageIcon("./src/Themes/Classic/Button.png"));
                     belongToQuestion = false;
                     canFlag = true;
-                    clickable = true;
+                    leftClickable = true;
                 }
                 /*TODO:
                 添加一个表示有旗子的变量
@@ -94,9 +98,10 @@ public class MinesweeperButton extends JButton {
                 再次右键点击旗子将取消插旗
                 */
             }
-            //当鼠标抬起是变为笑脸
-            MinesweeperWindows.FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_smile.png"));
-
+            if (leftClickable || rightClickable) {
+                //当鼠标抬起是变为笑脸
+                MinesweeperWindows.FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_smile.png"));
+            }
         }
 
         @Override
@@ -145,5 +150,17 @@ public class MinesweeperButton extends JButton {
             }
         }
         return numbers;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setLeftClickable(boolean status) {
+        this.leftClickable = status;
+    }
+
+    public void setRightClickable(boolean status) {
+        this.rightClickable = status;
     }
 }

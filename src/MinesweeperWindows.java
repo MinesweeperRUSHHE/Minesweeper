@@ -325,7 +325,7 @@ public class MinesweeperWindows {
         private int columns;
 
         public MainWindows(boolean[][] mines) {
-            //TODO:扫雷主界面，需要传入一个布尔数组
+            //扫雷主界面，需要传入一个布尔数组表示地雷排布
             setMatrix(mines);
             minesweeperButton = new MinesweeperButton[rows][columns];
             for (int i = 0; i < rows; i++) {
@@ -422,9 +422,23 @@ public class MinesweeperWindows {
             }
         }
     }
-/*TODO:
-添加一个显示剩余雷数的区域
- */
 
+    //引爆所有地雷的方法
+    public static void detonateAllMines(int xLocation, int yLocation) {
+        MinesweeperWindows.FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_cross-out eyes.png"));
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                minesweeperButton[i][j].setLeftClickable(false);
+                minesweeperButton[i][j].setRightClickable(false);
+                if (minesweeperButton[i][j].getStatus() == -1 && i != yLocation && j != xLocation) {
+                    minesweeperButton[i][j].setMinesVisible(true);
+                    minesweeperButton[i][j].setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine.png"));
+                }
+            }
+        }
+    }
 
+    /*TODO:
+    添加一个显示剩余雷数的区域
+     */
 }
