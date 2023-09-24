@@ -75,23 +75,23 @@ public class MinesweeperButton extends JButton {
             }
             //右键点击
             else if (e.getButton() == MouseEvent.BUTTON3 && rightClickable) {
-                //旗子图标
-                if (canFlag) {
+                if (canFlag) { // 插旗子分支
                     setIcon(new ImageIcon("./src/Themes/Classic/Button_flag.png"));
                     canFlag = false;
                     belongToFlag = true;
                     leftClickable = false;
-                } else if (belongToFlag) {
+                    MinesweeperStatusPanel.remainingMinesPanel.removeMine();
+                } else if (belongToFlag) { // 设置问号分支
                     setIcon(new ImageIcon("./src/Themes/Classic/Button_question.png"));
                     canFlag = false;
                     belongToFlag = false;
                     belongToQuestion = true;
-                    leftClickable = false;
-                } else if (belongToQuestion) {
+                    leftClickable = true;
+                    MinesweeperStatusPanel.remainingMinesPanel.addMine();
+                } else if (belongToQuestion) { // 还原分支
                     setIcon(new ImageIcon("./src/Themes/Classic/Button.png"));
                     belongToQuestion = false;
                     canFlag = true;
-                    leftClickable = true;
                 }
                 /*TODO:
                 添加一个表示有旗子的变量

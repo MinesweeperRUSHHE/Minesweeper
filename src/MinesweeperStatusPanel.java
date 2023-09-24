@@ -8,15 +8,18 @@ import java.util.TimerTask;
 public class MinesweeperStatusPanel extends JPanel {
     static FaceButton faceButton;
     MinesTimerPanel timerPanel;
+    static RemainingMinesPanel remainingMinesPanel;
 
     public MinesweeperStatusPanel() {
-        timerPanel = new MinesTimerPanel();
+        remainingMinesPanel = new RemainingMinesPanel();
         faceButton = new FaceButton(); // 添加笑脸按钮
+        timerPanel = new MinesTimerPanel();
 
         setLayout(new BorderLayout()); // 设置边框布局管理器
 
+        add(remainingMinesPanel, BorderLayout.WEST); //
+        add(faceButton, BorderLayout.CENTER); // 笑脸添加到状态面板中
         add(timerPanel, BorderLayout.EAST); // 计时器面板添加到状态面板右侧
-        add(faceButton); // 笑脸添加到状态面板中
     }
 
     static class MinesTimerPanel extends JPanel{
@@ -33,15 +36,16 @@ public class MinesweeperStatusPanel extends JPanel {
             timer_3 = new JLabel();
 
             //计时器初始图片为0
-            timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Timer_0.png"));
-            timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Timer_0.png"));
-            timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Timer_0.png"));
+            timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_0.png"));
+            timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_0.png"));
+            timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_0.png"));
 
             //计时器区域添加到计时器面板
             add(timer_1);
             add(timer_2);
             add(timer_3);
 
+            //初始化计时器
             minesTimer = new MinesTimer();
         }
         static class MinesTimer {
@@ -55,9 +59,9 @@ public class MinesweeperStatusPanel extends JPanel {
                 seconds = 0;
                 firstClick  = true;
                 started = false; // 初始化为false
-                MinesweeperStatusPanel.MinesTimerPanel.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Timer_0.png"));
-                MinesweeperStatusPanel.MinesTimerPanel.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Timer_0.png"));
-                MinesweeperStatusPanel.MinesTimerPanel.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Timer_0.png"));
+                MinesweeperStatusPanel.MinesTimerPanel.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_0.png"));
+                MinesweeperStatusPanel.MinesTimerPanel.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_0.png"));
+                MinesweeperStatusPanel.MinesTimerPanel.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_0.png"));
                 // 不要在这里启动计时器
             }
 
@@ -83,11 +87,11 @@ public class MinesweeperStatusPanel extends JPanel {
                 public void run() {
                     seconds++;
                     //个位数变更
-                    MinesweeperStatusPanel.MinesTimerPanel.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Timer_" + seconds % 10 + ".png"));
+                    MinesweeperStatusPanel.MinesTimerPanel.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + seconds % 10 + ".png"));
                     //十位数变更
-                    MinesweeperStatusPanel.MinesTimerPanel.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Timer_" + seconds / 10 % 10 + ".png"));
+                    MinesweeperStatusPanel.MinesTimerPanel.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + seconds / 10 % 10 + ".png"));
                     //百位数变更
-                    MinesweeperStatusPanel.MinesTimerPanel.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Timer_" + seconds / 100 % 10 + ".png"));
+                    MinesweeperStatusPanel.MinesTimerPanel.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + seconds / 100 % 10 + ".png"));
                 }
             };
         }
@@ -129,6 +133,63 @@ public class MinesweeperStatusPanel extends JPanel {
             @Override
             public void mouseExited(MouseEvent e) {
 
+            }
+        }
+    }
+
+    static class RemainingMinesPanel extends JPanel {
+        private final JLabel remainingMines_1; // 个位数
+        private final JLabel remainingMines_2; // 十位数
+        private final JLabel remainingMines_3; // 百位数
+        private static int mines;
+        public RemainingMinesPanel() {
+            mines = MinesweeperWindows.getMines();
+
+            remainingMines_1 = new JLabel();
+            remainingMines_2 = new JLabel();
+            remainingMines_3 = new JLabel();
+
+            setLabel();
+
+            add(remainingMines_3);
+            add(remainingMines_2);
+            add(remainingMines_1);
+        }
+
+        public void addMine() {
+            mines++;
+            setLabel();
+        }
+
+        public void removeMine() {
+            mines--;
+            setLabel();
+        }
+
+        private void setLabel() {
+            char[] ch = String.valueOf(mines).toCharArray();
+
+            if (ch[0] == '-' && mines > 99) {
+                remainingMines_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_9.png"));
+                remainingMines_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_9.png"));
+                remainingMines_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_below zero.png"));
+            } else if (ch[0] == '-' && mines < 0 && mines >= -99) {
+                if (mines > -10) {
+                    remainingMines_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + ch[1] + ".png"));
+                    remainingMines_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_0.png"));
+                } else {
+                    remainingMines_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + ch[2] + ".png"));
+                    remainingMines_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + ch[1] + ".png"));
+                }
+                remainingMines_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_below zero.png"));
+            } else if (mines > 999) {
+                remainingMines_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_9.png"));
+                remainingMines_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_9.png"));
+                remainingMines_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_9.png"));
+            } else {
+                remainingMines_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + mines % 10 + ".png"));
+                remainingMines_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + mines / 10 % 10 + ".png"));
+                remainingMines_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + mines / 100 % 10 + ".png"));
             }
         }
     }

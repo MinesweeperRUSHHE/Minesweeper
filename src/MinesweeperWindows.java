@@ -9,7 +9,7 @@ public class MinesweeperWindows {
     private static MinesweeperButton[][] minesweeperButton;
     private static int height;
     private static int width;
-    private static int mines;
+    private static int mines; // 此为设置的地雷数
 
     public void executeDifficultChoice() {
         /*
@@ -280,9 +280,9 @@ public class MinesweeperWindows {
                             minesweeperButton[i][j].setIcon(new ImageIcon("./src/Themes/Classic/Button.png"));
                         }
                     }//计时器初始化
-                    MinesweeperStatusPanel.MinesTimerPanel.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Timer_0.png"));
-                    MinesweeperStatusPanel.MinesTimerPanel.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Timer_0.png"));
-                    MinesweeperStatusPanel.MinesTimerPanel.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Timer_0.png"));
+                    MinesweeperStatusPanel.MinesTimerPanel.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_0.png"));
+                    MinesweeperStatusPanel.MinesTimerPanel.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_0.png"));
+                    MinesweeperStatusPanel.MinesTimerPanel.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_0.png"));
                     MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.firstClick = true;
                     /*TODO:
                     将格子设置成未打开状态
@@ -376,8 +376,4 @@ public class MinesweeperWindows {
             }
         }
     }
-
-    /*TODO:
-    添加一个显示剩余雷数的区域
-     */
 }
