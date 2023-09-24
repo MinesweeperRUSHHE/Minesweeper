@@ -31,16 +31,16 @@ public class MinesweeperButton extends JButton {
     MouseListener mouseListener = new MouseListener() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            if(MinesTimer.firstClick){
-                MinesweeperWindows.minesTimer = new MinesTimer(); //启动计时器
-                MinesTimer.firstClick = false;
+            if(MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.firstClick){
+                MinesweeperWindows.minesTimer = new MinesweeperStatusPanel.MinesTimerPanel.MinesTimer(); //启动计时器
+                MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.firstClick = false;
             }
         }
 
         @Override
         public void mousePressed(MouseEvent e) {
             if (leftClickable || rightClickable) {
-                MinesweeperWindows.FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_astonished.png")); //按下时为疑惑
+                MinesweeperStatusPanel.faceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_astonished.png")); //按下时为疑惑
             }
         }
 
@@ -100,7 +100,7 @@ public class MinesweeperButton extends JButton {
             }
             if (leftClickable || rightClickable) {
                 //当鼠标抬起是变为笑脸
-                MinesweeperWindows.FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_smile.png"));
+                MinesweeperStatusPanel.faceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_smile.png"));
             }
         }
 
