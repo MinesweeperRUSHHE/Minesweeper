@@ -3,6 +3,6 @@ public class Minesweeper {
 
         MinesweeperWindows mw = new MinesweeperWindows();
         mw.executeDifficultChoice();
-        mw.executeMinesweeper(new boolean[mw.getHeight()][mw.getWidth()], mw.getMines());
+        mw.executeMinesweeper(new boolean[MinesweeperWindows.getHeight()][MinesweeperWindows.getWidth()], MinesweeperWindows.getMines());
     }
 }

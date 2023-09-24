@@ -31,10 +31,7 @@ public class MinesweeperButton extends JButton {
     MouseListener mouseListener = new MouseListener() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            if(MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.firstClick){
-                MinesweeperWindows.minesTimer = new MinesweeperStatusPanel.MinesTimerPanel.MinesTimer(); //启动计时器
-                MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.firstClick = false;
-            }
+
         }
 
         @Override
@@ -47,6 +44,10 @@ public class MinesweeperButton extends JButton {
 
         @Override
         public void mouseReleased(MouseEvent e) {
+            if(MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.firstClick){
+                MinesweeperStatusPanel.MinesTimerPanel.minesTimer.start(); //启动计时器
+                MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.firstClick = false;
+            }
             //左键点击
             if (e.getButton() == MouseEvent.BUTTON1 && leftClickable) {
                 switch (status) {
@@ -56,7 +57,7 @@ public class MinesweeperButton extends JButton {
                         leftClickable = false;
                         rightClickable = false;
                         setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine_exploded.png"));
-                        MinesweeperWindows.minesTimer.stop();
+                        MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                         MinesweeperWindows.detonateAllMines(xLocation, yLocation);
                     }
                     case 0 -> {
@@ -142,9 +143,9 @@ public class MinesweeperButton extends JButton {
         //计数器
         int numbers = 0;
         //计算九宫格内的地雷数量
-        for (int i = yLocation - 1; i <= yLocation + 1; i++) {
-            for (int j = xLocation - 1; j <= xLocation + 1; j++) {
-                if (!((i < 0 || i >= mines.length) || (j < 0 || j >= mines[0].length)) && mines[i][j]) {
+        for (int i = Math.max(0, yLocation - 1); i <= Math.min(mines.length - 1, yLocation + 1); i++) {
+            for (int j = Math.max(0, xLocation - 1); j <= Math.min(mines[0].length - 1, xLocation + 1); j++) {
+                if (mines[i][j]) {
                     numbers++;
                 }
             }
