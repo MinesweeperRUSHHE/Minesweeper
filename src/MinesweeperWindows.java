@@ -352,7 +352,6 @@ public class MinesweeperWindows {
             minesweeper.setLocationRelativeTo(null); // 设置窗口居中
             minesweeper.setVisible(true); // 设置窗口可见
             minesweeper.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 设置窗口关闭方式
-            MinesweeperStatusPanel.MinesTimerPanel.minesTimer.start();
         }
 
         public void setMatrix(boolean[][] matrix) {
