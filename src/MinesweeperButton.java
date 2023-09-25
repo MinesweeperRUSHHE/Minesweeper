@@ -6,28 +6,11 @@ public class MinesweeperButton extends JButton {
     private final int status; // -1是雷，0-8为附近的雷数
     private final int xLocation;
     private final int yLocation;
-    private boolean leftClickable = true;
-    private boolean rightClickable = true;
+    public boolean leftClickable = true;
+    public boolean rightClickable = true;
     private boolean canFlag = true;
     private boolean belongToFlag = false;
     private boolean belongToQuestion = false;
-
-    /*TODO:
-    添加一个方法，每次点击鼠标时调用该方法改变笑脸状态
-    添加一个表示游戏状态的标志，初始值为0
-    根据输赢改变Face的状态
-    赢：flag = 1
-    FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_smile_sunglasses.png"));
-    正常：flag = 0
-    FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_smile.png"));
-    输：flag = -1
-    FaceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_smile_cross-out eyes.png"));
-    */
-    /*TODO:
-    添加一个胜利条件的方法
-    当剩余雷数 = 0 且 所有格子点开时胜利
-    当只剩一个格子且这个格子是雷时胜利
-     */
     MouseListener mouseListener = new MouseListener() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -93,11 +76,6 @@ public class MinesweeperButton extends JButton {
                     belongToQuestion = false;
                     canFlag = true;
                 }
-                /*TODO:
-                添加一个表示有旗子的变量
-                插旗子时剩余雷数 - 1
-                再次右键点击旗子将取消插旗
-                */
             }
             if (leftClickable || rightClickable) {
                 //当鼠标抬起是变为笑脸

@@ -38,7 +38,6 @@ public class MinesweeperWindows {
                 width = customDifficulty.getWidth();
                 mines = customDifficulty.getMines();
             }
-            //TODO:确认这里直接结束程序是否合适
             default -> System.exit(0);
         }
     }
@@ -197,17 +196,22 @@ public class MinesweeperWindows {
             menuBar.add(menuHelps);
 
             //为菜单项添加事件监听器
+            //开局
             class Item1_5Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
+                    //关闭计时器
                     if(MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                     }
+                    //关闭原窗口
                     minesweeper.dispose();
+                    //打开新窗口
                     new MinesweeperWindows().executeMinesweeper(new boolean[MinesweeperWindows.height][MinesweeperWindows.width], MinesweeperWindows.mines);
                 }
             }
             menuItem1_5.addActionListener(new Item1_5Listener());
+            //初级
             class Item1_1Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
@@ -226,46 +230,60 @@ public class MinesweeperWindows {
                 }
             }
             menuItem1_1.addActionListener(new Item1_1Listener());
+            //中级
             class Item1_2Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
+                    //关闭计时器
                     if(MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                     }
+                    //关闭原窗口
                     minesweeper.dispose();
+                    //修改数据
                     height = 16;
                     width = 16;
                     mines = 40;
+                    //打开新窗口
                     new MinesweeperWindows().executeMinesweeper(new boolean[MinesweeperWindows.height][MinesweeperWindows.width], MinesweeperWindows.mines);
                 }
             }
             menuItem1_2.addActionListener(new Item1_2Listener());
+            //高级
             class Item1_3Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
+                    //关闭计时器
                     if(MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                     }
+                    //关闭原窗口
                     minesweeper.dispose();
+                    //修改数据
                     height = 16;
                     width = 30;
                     mines = 99;
+                    //打开新窗口
                     new MinesweeperWindows().executeMinesweeper(new boolean[MinesweeperWindows.height][MinesweeperWindows.width], MinesweeperWindows.mines);
                 }
             }
             menuItem1_3.addActionListener(new Item1_3Listener());
+            //自定义
             class Item1_4Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
                     if(MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                     }
+                    //关闭原窗口
                     minesweeper.dispose();
+                    //打开新窗口
                     CustomDifficulty customDifficulty = new CustomDifficulty();
                     new MinesweeperWindows().executeMinesweeper(new boolean[customDifficulty.getHeight()][customDifficulty.getWidth()], customDifficulty.getMines());
                 }
             }
             menuItem1_4.addActionListener(new Item1_4Listener());
+            //重新开始这一局
             class Item1_6Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
@@ -278,16 +296,11 @@ public class MinesweeperWindows {
                     for (i = 0; i < MinesweeperWindows.height; i++) {
                         for (j = 0; j < MinesweeperWindows.width; j++) {
                             minesweeperButton[i][j].setIcon(new ImageIcon("./src/Themes/Classic/Button.png"));
+                            minesweeperButton[i][j].leftClickable = true;
+                            minesweeperButton[i][j].rightClickable = true;
                         }
                     }//计时器初始化
-                    MinesweeperStatusPanel.MinesTimerPanel.timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_0.png"));
-                    MinesweeperStatusPanel.MinesTimerPanel.timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_0.png"));
-                    MinesweeperStatusPanel.MinesTimerPanel.timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_0.png"));
-                    MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.firstClick = true;
-                    /*TODO:
-                    将格子设置成未打开状态
-                    将剩余雷数归零
-                    */
+                    MinesweeperStatusPanel.MinesTimerPanel.minesTimer = new MinesweeperStatusPanel.MinesTimerPanel.MinesTimer();
                 }
 
             }
