@@ -376,4 +376,40 @@ public class MinesweeperWindows {
             }
         }
     }
-}
+
+    public static void OpenAllCell(int x, int y){
+        {if(minesweeperButton[x][y].minesVisible)return;
+            else {
+                minesweeperButton[x][y].setIcon(new ImageIcon("./src/Themes/Classic/Button_0.png"));//打开该方格
+            if (minesweeperButton[x][y].getStatus() != 0) {
+                minesweeperButton[x][y].setIcon(new ImageIcon("./src/Themes/Classic/Button_" + minesweeperButton[x][y].getStatus() + "+.png"));//如果该方格是数字那么就显示数字
+            } else {//使用递归调用函数
+                if (x > 0) {
+                    OpenAllCell(x - 1, y);
+                }
+                if (y < minesweeperButton[0].length) {
+                    OpenAllCell(x, y + 1);
+                }
+                if (x > 0 && y > 0) {
+                    OpenAllCell(x - 1, y - 1);
+                }
+                if (x > 0 && y < minesweeperButton[0].length) {
+                    OpenAllCell(x - 1, y + 1);
+                }
+                if (y > 0) {
+                    OpenAllCell(x, y - 1);
+                }
+                if (x < minesweeperButton.length && y > 0) {
+                    OpenAllCell(x + 1, y - 1);
+                }
+                if (x < minesweeperButton.length) {
+                    OpenAllCell(x + 1, y);
+                }
+                if (x < minesweeperButton.length && y < minesweeperButton[0].length) {
+                    OpenAllCell(x + 1, y + 1);
+                }
+            }
+            }
+        }
+        }
+    }

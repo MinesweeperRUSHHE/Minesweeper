@@ -64,6 +64,7 @@ public class MinesweeperButton extends JButton {
                         //空且附近地雷为0
                         canFlag = false;
                         setIcon(new ImageIcon("./src/Themes/Classic/Button_0.png"));
+                        MinesweeperWindows.OpenAllCell(yLocation,xLocation);
                         //TODO:需要一个翻开一片空格子的方法
                     }
                     default -> {
@@ -115,7 +116,7 @@ public class MinesweeperButton extends JButton {
 
         }
     };
-    private boolean minesVisible = false;//false为不可见，true为可见
+    public boolean minesVisible = false;//false为不可见，true为可见
 
     public MinesweeperButton(int xLocation, int yLocation, boolean[][] status) {
         //调用JButton类的无参构造方法，创建一个没有文本或图标的按钮
