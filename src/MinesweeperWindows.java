@@ -11,33 +11,6 @@ public class MinesweeperWindows {
     private static int width;
     private static int mines; // 此为设置的地雷数
 
-    public static int getHeight() {
-        return height;
-    }
-
-    public static int getWidth() {
-        return width;
-    }
-
-    public static int getMines() {
-        return mines;
-    }
-
-    //引爆所有地雷的方法
-    public static void detonateAllMines(int xLocation, int yLocation) {
-        MinesweeperStatusPanel.faceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_cross-out eyes.png"));
-        for (int i = 0; i < minesweeperButton.length; i++) {
-            for (int j = 0; j < minesweeperButton[0].length; j++) {
-                minesweeperButton[i][j].setLeftClickable(false);
-                minesweeperButton[i][j].setRightClickable(false);
-                if (minesweeperButton[i][j].getStatus() == -1 && i != yLocation && j != xLocation) {
-                    minesweeperButton[i][j].setMinesVisible(true);
-                    minesweeperButton[i][j].setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine.png"));
-                }
-            }
-        }
-    }
-
     public void executeDifficultChoice() {
         /*
         choice [0,1,2,3]分别对应"低级", "中级", "高级", "自定义"
@@ -88,25 +61,17 @@ public class MinesweeperWindows {
         }
     }
 
-    public static void openAllCell(int xLocation, int yLocation) {
-        minesweeperButton[yLocation][xLocation].setMinesVisible(true);
-        minesweeperButton[yLocation][xLocation].setIcon(new ImageIcon("./src/Themes/Classic/Button_0.png"));
-        minesweeperButton[yLocation][xLocation].setCanFlag(false);
-
-        if (yLocation - 1 >= 0 && minesweeperButton[yLocation - 1][xLocation].getStatus() == 0 && !minesweeperButton[yLocation - 1][xLocation].isMinesVisible()) {
-            openAllCell(xLocation, yLocation - 1);
-        }
-        if (yLocation + 1 < minesweeperButton.length && minesweeperButton[yLocation + 1][xLocation].getStatus() == 0 && !minesweeperButton[yLocation + 1][xLocation].isMinesVisible()) {
-            openAllCell(xLocation, yLocation + 1);
-        }
-        if (xLocation - 1 >= 0 && minesweeperButton[yLocation][xLocation - 1].getStatus() == 0 && !minesweeperButton[yLocation][xLocation - 1].isMinesVisible()) {
-            openAllCell(xLocation - 1, yLocation);
-        }
-        if (xLocation + 1 < minesweeperButton[0].length && minesweeperButton[yLocation][xLocation + 1].getStatus() == 0 && !minesweeperButton[yLocation][xLocation + 1].isMinesVisible()) {
-            openAllCell(xLocation + 1, yLocation);
-        }
+    public static int getHeight() {
+        return height;
     }
 
+    public static int getWidth() {
+        return width;
+    }
+
+    public static int getMines() {
+        return mines;
+    }
 
     /*
     showInputDialog获取用户输入的数据
@@ -151,7 +116,7 @@ public class MinesweeperWindows {
                     //判断输入的是否为整数
                     Integer.parseInt(number);
                     //判断整数的大小是否符合要求
-                    return 8 > Integer.parseInt(number) || Integer.parseInt(number) > 30;
+                    return 8 >= Integer.parseInt(number) || Integer.parseInt(number) >= 30;
                 } catch (Exception e) {
                     //不是整数
                     return true;
@@ -236,7 +201,7 @@ public class MinesweeperWindows {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
                     //关闭计时器
-                    if (MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
+                    if(MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                     }
                     //关闭原窗口
@@ -251,7 +216,7 @@ public class MinesweeperWindows {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
                     //关闭计时器
-                    if (MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
+                    if(MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                     }
                     //关闭原窗口
@@ -270,7 +235,7 @@ public class MinesweeperWindows {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
                     //关闭计时器
-                    if (MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
+                    if(MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                     }
                     //关闭原窗口
@@ -289,7 +254,7 @@ public class MinesweeperWindows {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
                     //关闭计时器
-                    if (MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
+                    if(MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                     }
                     //关闭原窗口
@@ -307,7 +272,7 @@ public class MinesweeperWindows {
             class Item1_4Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                    if (MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
+                    if(MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                     }
                     //关闭原窗口
@@ -323,7 +288,7 @@ public class MinesweeperWindows {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
                     //关闭计时器
-                    if (MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
+                    if(MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                     }
                     //遍历所有格子，将他们设置为初始状态
@@ -333,7 +298,6 @@ public class MinesweeperWindows {
                             minesweeperButton[i][j].setIcon(new ImageIcon("./src/Themes/Classic/Button.png"));
                             minesweeperButton[i][j].leftClickable = true;
                             minesweeperButton[i][j].rightClickable = true;
-                            minesweeperButton[i][j].setMinesVisible(false);
                         }
                     }//计时器初始化
                     MinesweeperStatusPanel.MinesTimerPanel.minesTimer = new MinesweeperStatusPanel.MinesTimerPanel.MinesTimer();
@@ -409,5 +373,20 @@ public class MinesweeperWindows {
             columns = matrix[0].length;
         }
 
+    }
+
+    //引爆所有地雷的方法
+    public static void detonateAllMines(int xLocation, int yLocation) {
+        MinesweeperStatusPanel.faceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_cross-out eyes.png"));
+        for (int i = 0; i < minesweeperButton.length; i++) {
+            for (int j = 0; j < minesweeperButton[0].length; j++) {
+                minesweeperButton[i][j].setLeftClickable(false);
+                minesweeperButton[i][j].setRightClickable(false);
+                if (minesweeperButton[i][j].getStatus() == -1 && i != yLocation && j != xLocation) {
+                    minesweeperButton[i][j].setMinesVisible(true);
+                    minesweeperButton[i][j].setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine.png"));
+                }
+            }
+        }
     }
 }
