@@ -30,7 +30,7 @@ public class MinesweeperWindows {
             for (int j = 0; j < minesweeperButton[0].length; j++) {
                 minesweeperButton[i][j].setLeftClickable(false);
                 minesweeperButton[i][j].setRightClickable(false);
-                if (minesweeperButton[i][j].getStatus() == -1 && i != yLocation && j != xLocation) {
+                if (minesweeperButton[i][j].getStatus() == -1 && !(i == yLocation && j == xLocation)) {
                     minesweeperButton[i][j].setMinesVisible(true);
                     minesweeperButton[i][j].setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine.png"));
                 }
