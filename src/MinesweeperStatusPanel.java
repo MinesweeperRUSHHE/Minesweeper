@@ -141,9 +141,9 @@ public class MinesweeperStatusPanel extends JPanel {
         private final JLabel remainingMines_1; // 个位数
         private final JLabel remainingMines_2; // 十位数
         private final JLabel remainingMines_3; // 百位数
-        private static int mines;
+        private static int minesNumber;
         public RemainingMinesPanel() {
-            mines = MinesweeperWindows.getMines();
+            minesNumber = MinesweeperWindows.getMines();
 
             remainingMines_1 = new JLabel();
             remainingMines_2 = new JLabel();
@@ -157,39 +157,26 @@ public class MinesweeperStatusPanel extends JPanel {
         }
 
         public void addMine() {
-            mines++;
+            minesNumber++;
             setLabel();
         }
 
         public void removeMine() {
-            mines--;
+            minesNumber--;
             setLabel();
         }
 
         private void setLabel() {
-            char[] ch = String.valueOf(mines).toCharArray();
-
-            if (ch[0] == '-' && mines > 99) {
-                remainingMines_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_9.png"));
-                remainingMines_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_9.png"));
-                remainingMines_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_below zero.png"));
-            } else if (ch[0] == '-' && mines < 0 && mines >= -99) {
-                if (mines > -10) {
-                    remainingMines_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + ch[1] + ".png"));
-                    remainingMines_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_0.png"));
-                } else {
-                    remainingMines_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + ch[2] + ".png"));
-                    remainingMines_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + ch[1] + ".png"));
-                }
-                remainingMines_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_below zero.png"));
-            } else if (mines > 999) {
-                remainingMines_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_9.png"));
-                remainingMines_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_9.png"));
-                remainingMines_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_9.png"));
+            if (minesNumber >= 0) {
+                int numbers = Math.min(minesNumber, 999);
+                remainingMines_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + numbers % 10 + ".png"));
+                remainingMines_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + numbers / 10 % 10 + ".png"));
+                remainingMines_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + numbers / 100 % 10 + ".png"));
             } else {
-                remainingMines_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + mines % 10 + ".png"));
-                remainingMines_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + mines / 10 % 10 + ".png"));
-                remainingMines_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + mines / 100 % 10 + ".png"));
+                int numbers = (minesNumber > -99 ? -minesNumber : 99);
+                remainingMines_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + numbers % 10 + ".png"));
+                remainingMines_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + numbers / 10 % 10 + ".png"));
+                remainingMines_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_below zero.png"));
             }
         }
     }
