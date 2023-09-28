@@ -38,6 +38,25 @@ public class MinesweeperWindows {
         }
     }
 
+    public static void openAllCell(int xLocation, int yLocation) {
+        minesweeperButton[yLocation][xLocation].setMinesVisible(true);
+        minesweeperButton[yLocation][xLocation].setIcon(new ImageIcon("./src/Themes/Classic/Button_0.png"));
+        minesweeperButton[yLocation][xLocation].setCanFlag(false);
+
+        if (yLocation - 1 >= 0 && minesweeperButton[yLocation - 1][xLocation].getStatus() == 0 && !minesweeperButton[yLocation - 1][xLocation].isMinesVisible()) {
+            openAllCell(xLocation, yLocation - 1);
+        }
+        if (yLocation + 1 < minesweeperButton.length && minesweeperButton[yLocation + 1][xLocation].getStatus() == 0 && !minesweeperButton[yLocation + 1][xLocation].isMinesVisible()) {
+            openAllCell(xLocation, yLocation + 1);
+        }
+        if (xLocation - 1 >= 0 && minesweeperButton[yLocation][xLocation - 1].getStatus() == 0 && !minesweeperButton[yLocation][xLocation - 1].isMinesVisible()) {
+            openAllCell(xLocation - 1, yLocation);
+        }
+        if (xLocation + 1 < minesweeperButton[0].length && minesweeperButton[yLocation][xLocation + 1].getStatus() == 0 && !minesweeperButton[yLocation][xLocation + 1].isMinesVisible()) {
+            openAllCell(xLocation + 1, yLocation);
+        }
+    }
+
     public void executeDifficultChoice() {
         /*
         choice [0,1,2,3]分别对应"低级", "中级", "高级", "自定义"
@@ -87,26 +106,6 @@ public class MinesweeperWindows {
             }
         }
     }
-
-    public static void openAllCell(int xLocation, int yLocation) {
-        minesweeperButton[yLocation][xLocation].setMinesVisible(true);
-        minesweeperButton[yLocation][xLocation].setIcon(new ImageIcon("./src/Themes/Classic/Button_0.png"));
-        minesweeperButton[yLocation][xLocation].setCanFlag(false);
-
-        if (yLocation - 1 >= 0 && minesweeperButton[yLocation - 1][xLocation].getStatus() == 0 && !minesweeperButton[yLocation - 1][xLocation].isMinesVisible()) {
-            openAllCell(xLocation, yLocation - 1);
-        }
-        if (yLocation + 1 < minesweeperButton.length && minesweeperButton[yLocation + 1][xLocation].getStatus() == 0 && !minesweeperButton[yLocation + 1][xLocation].isMinesVisible()) {
-            openAllCell(xLocation, yLocation + 1);
-        }
-        if (xLocation - 1 >= 0 && minesweeperButton[yLocation][xLocation - 1].getStatus() == 0 && !minesweeperButton[yLocation][xLocation - 1].isMinesVisible()) {
-            openAllCell(xLocation - 1, yLocation);
-        }
-        if (xLocation + 1 < minesweeperButton[0].length && minesweeperButton[yLocation][xLocation + 1].getStatus() == 0 && !minesweeperButton[yLocation][xLocation + 1].isMinesVisible()) {
-            openAllCell(xLocation + 1, yLocation);
-        }
-    }
-
 
     /*
     showInputDialog获取用户输入的数据
@@ -408,6 +407,5 @@ public class MinesweeperWindows {
             rows = matrix.length;
             columns = matrix[0].length;
         }
-
     }
 }

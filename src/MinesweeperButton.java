@@ -11,6 +11,7 @@ public class MinesweeperButton extends JButton {
     private boolean canFlag = true;
     private boolean belongToFlag = false;
     private boolean belongToQuestion = false;
+    private boolean minesVisible = false;//false为不可见，true为可见
     MouseListener mouseListener = new MouseListener() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -24,10 +25,9 @@ public class MinesweeperButton extends JButton {
             }
         }
 
-
         @Override
         public void mouseReleased(MouseEvent e) {
-            if(MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.firstClick){
+            if (MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.firstClick) {
                 MinesweeperStatusPanel.MinesTimerPanel.minesTimer.start(); //启动计时器
                 MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.firstClick = false;
             }
@@ -94,7 +94,6 @@ public class MinesweeperButton extends JButton {
 
         }
     };
-    private boolean minesVisible = false;//false为不可见，true为可见
 
     public MinesweeperButton(int xLocation, int yLocation, boolean[][] status) {
         //调用JButton类的无参构造方法，创建一个没有文本或图标的按钮
@@ -113,12 +112,12 @@ public class MinesweeperButton extends JButton {
         addMouseListener(mouseListener);
     }
 
-    public void setMinesVisible(boolean minesVisible) {
-        this.minesVisible = minesVisible;
-    }
-
     public boolean isMinesVisible() {
         return minesVisible;
+    }
+
+    public void setMinesVisible(boolean minesVisible) {
+        this.minesVisible = minesVisible;
     }
 
     public void setCanFlag(boolean canFlag) {
