@@ -43,17 +43,13 @@ public class MinesweeperButton extends JButton {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                         MinesweeperWindows.detonateAllMines(xLocation, yLocation);
                     }
+                    //空且附近地雷为0
                     case 0 -> {
-                        //空且附近地雷为0
-                        canFlag = false;
-                        setIcon(new ImageIcon("./src/Themes/Classic/Button_0.png"));
+                        setButtonIcon();
                         //TODO:需要一个翻开一片空格子的方法
                         MinesweeperWindows.openAllCell(xLocation, yLocation);
                     }
-                    default -> {
-                        canFlag = false;
-                        setIcon(new ImageIcon("./src/Themes/Classic/Button_" + status + ".png"));
-                    }
+                    default -> setButtonIcon();
                 }
                 //TODO:在此调用检查输赢的方法
             }
@@ -149,5 +145,11 @@ public class MinesweeperButton extends JButton {
 
     public void setRightClickable(boolean status) {
         this.rightClickable = status;
+    }
+
+    //设置地雷按钮图标，并添加一些规则
+    public void setButtonIcon() {
+        canFlag = false;
+        setIcon(new ImageIcon("./src/Themes/Classic/Button_" + status + ".png"));
     }
 }

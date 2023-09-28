@@ -40,8 +40,7 @@ public class MinesweeperWindows {
 
     public static void openAllCell(int xLocation, int yLocation) {
         minesweeperButton[yLocation][xLocation].setMinesVisible(true);
-        minesweeperButton[yLocation][xLocation].setIcon(new ImageIcon("./src/Themes/Classic/Button_0.png"));
-        minesweeperButton[yLocation][xLocation].setCanFlag(false);
+        minesweeperButton[yLocation][xLocation].setButtonIcon();
 
         if (yLocation - 1 >= 0 && minesweeperButton[yLocation - 1][xLocation].getStatus() == 0 && !minesweeperButton[yLocation - 1][xLocation].isMinesVisible()) {
             openAllCell(xLocation, yLocation - 1);
@@ -54,6 +53,14 @@ public class MinesweeperWindows {
         }
         if (xLocation + 1 < minesweeperButton[0].length && minesweeperButton[yLocation][xLocation + 1].getStatus() == 0 && !minesweeperButton[yLocation][xLocation + 1].isMinesVisible()) {
             openAllCell(xLocation + 1, yLocation);
+        }
+        //显示附近没有地雷的九宫格的带数字的格子
+        for (int i = Math.max(0, yLocation - 1); i <= Math.min(minesweeperButton.length - 1, yLocation + 1); i++) {
+            for (int j = Math.max(0, xLocation - 1); j <= Math.min(minesweeperButton[0].length - 1, xLocation + 1); j++) {
+                if (!(minesweeperButton[i][j].getStatus() == -1 && minesweeperButton[i][j].getStatus() == 0)) {
+                    minesweeperButton[i][j].setButtonIcon();
+                }
+            }
         }
     }
 
