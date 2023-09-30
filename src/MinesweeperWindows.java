@@ -384,7 +384,6 @@ public class MinesweeperWindows {
         }
 
         public void executeMinesweeper() {
-
             minesweeper = new JFrame("扫雷");
             minesweeper.setJMenuBar(new Menu().getJMenuBar());
             minesweeper.setLayout(new BorderLayout()); // 设置边框布局管理器
@@ -392,7 +391,7 @@ public class MinesweeperWindows {
             MinesweeperStatusPanel statusPanel = new MinesweeperStatusPanel(); // 显示状态的面板
             JPanel minesPanel = new JPanel(); // 放置地雷的面板
 
-            minesPanel.setLayout(new GridLayout(rows, columns)); // 使用网格布局管理器管理地雷按钮
+            minesPanel.setLayout(new GridLayout(rows, columns, 0, 0)); // 使用网格布局管理器管理地雷按钮
 
             //将地雷按钮添加到一个网格panel里
             for (int i = 0; i < rows; i++) {

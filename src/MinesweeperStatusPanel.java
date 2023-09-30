@@ -15,30 +15,30 @@ public class MinesweeperStatusPanel extends JPanel {
         faceButton = new FaceButton(); // 添加笑脸按钮
         timerPanel = new MinesTimerPanel();
 
-        setLayout(new BorderLayout()); // 设置边框布局管理器
+        setLayout(new FlowLayout()); // 设置边框布局管理器
 
-        add(remainingMinesPanel, BorderLayout.WEST); //
-        add(faceButton, BorderLayout.CENTER); // 笑脸添加到状态面板中
-        add(timerPanel, BorderLayout.EAST); // 计时器面板添加到状态面板右侧
+        add(remainingMinesPanel, FlowLayout.LEFT); //
+        add(faceButton, FlowLayout.CENTER); // 笑脸添加到状态面板中
+        add(timerPanel, FlowLayout.RIGHT); // 计时器面板添加到状态面板右侧
     }
 
     static class MinesTimerPanel extends JPanel {
 
-        public static JLabel timer_1;
-        public static JLabel timer_2;
-        public static JLabel timer_3;
+        private static JLabel timer_1;
+        private static JLabel timer_2;
+        private static JLabel timer_3;
         public static MinesTimer minesTimer;
 
         public MinesTimerPanel() {
-            //创建三个计时器面板
             timer_1 = new JLabel();
             timer_2 = new JLabel();
             timer_3 = new JLabel();
 
-            //计时器初始图片为0
-            timer_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_0.png"));
-            timer_2.setIcon(new ImageIcon("./src/Themes/Classic/Number_0.png"));
-            timer_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_0.png"));
+            initialLabel(timer_1);
+            initialLabel(timer_2);
+            initialLabel(timer_3);
+
+            setLayout(new GridLayout(1, 3, 0, 0));
 
             //计时器区域添加到计时器面板
             add(timer_1);
@@ -100,7 +100,9 @@ public class MinesweeperStatusPanel extends JPanel {
 
     static class FaceButton extends JButton {
         public FaceButton() {
-            setIcon(new ImageIcon("./src/Themes/Classic/Face_smile.png")); // 初始为微笑
+            ImageIcon imageIcon = new ImageIcon("./src/Themes/Classic/Face_smile.png");
+            setPreferredSize(new Dimension(imageIcon.getIconHeight(), imageIcon.getIconWidth())); // 设置图标大小
+            setIcon(imageIcon); // 初始为微笑
             addMouseListener(new FaceButton.FaceButtonListener()); // 为笑脸按钮添加鼠标监视器
         }
 
@@ -151,8 +153,12 @@ public class MinesweeperStatusPanel extends JPanel {
             remainingMines_2 = new JLabel();
             remainingMines_3 = new JLabel();
 
-            setLabel();
+            initialLabel(remainingMines_1);
+            initialLabel(remainingMines_2);
+            initialLabel(remainingMines_3);
+            setLabelIcon();
 
+            setLayout(new GridLayout(1, 3, 0, 0));
             add(remainingMines_3);
             add(remainingMines_2);
             add(remainingMines_1);
@@ -161,16 +167,16 @@ public class MinesweeperStatusPanel extends JPanel {
         //增加显示地雷数量的方法
         public void addMine() {
             minesNumber++;
-            setLabel();
+            setLabelIcon();
         }
 
         //减少显示地雷数量的方法
         public void removeMine() {
             minesNumber--;
-            setLabel();
+            setLabelIcon();
         }
 
-        private void setLabel() {
+        private void setLabelIcon() {
             if (minesNumber >= 0) {
                 int numbers = Math.min(minesNumber, 999); // 最大值不能超过999
                 remainingMines_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + numbers % 10 + ".png"));
@@ -183,5 +189,11 @@ public class MinesweeperStatusPanel extends JPanel {
                 remainingMines_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_below zero.png")); // 负数的百位数不能被操作，默认为负号
             }
         }
+    }
+
+    private static void initialLabel(JLabel label) {
+        ImageIcon imageIcon = new ImageIcon("./src/Themes/Classic/Number_0.png");
+        label.setPreferredSize(new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight()));
+        label.setIcon(imageIcon);
     }
 }

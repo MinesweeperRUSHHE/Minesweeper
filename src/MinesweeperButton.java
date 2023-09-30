@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -92,10 +93,10 @@ public class MinesweeperButton extends JButton {
     };
 
     public MinesweeperButton(int xLocation, int yLocation, boolean[][] status) {
-        //调用JButton类的无参构造方法，创建一个没有文本或图标的按钮
-        super();
-        //默认为未点击图标
-        setIcon(new ImageIcon("./src/Themes/Classic/Button.png"));
+        //设置按钮的尺寸及图标
+        ImageIcon imageIcon = new ImageIcon("./src/Themes/Classic/Button.png");
+        setPreferredSize(new Dimension(imageIcon.getIconHeight(), imageIcon.getIconWidth()));
+        setIcon(imageIcon);
         //传入按钮的xy坐标，记录按钮位置
         this.xLocation = xLocation;
         this.yLocation = yLocation;
@@ -150,6 +151,7 @@ public class MinesweeperButton extends JButton {
     //设置地雷按钮图标，并添加一些规则
     public void setButtonIcon() {
         canFlag = false;
-        setIcon(new ImageIcon("./src/Themes/Classic/Button_" + status + ".png"));
+        ImageIcon imageIcon = new ImageIcon("./src/Themes/Classic/Button_" + status + ".png");
+        setIcon(imageIcon);
     }
 }
