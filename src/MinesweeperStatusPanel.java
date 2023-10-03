@@ -22,12 +22,18 @@ public class MinesweeperStatusPanel extends JPanel {
         add(timerPanel, FlowLayout.RIGHT); // 计时器面板添加到状态面板右侧
     }
 
+    private static void initialLabel(JLabel label) {
+        ImageIcon imageIcon = new ImageIcon("./src/Themes/Classic/Number_0.png");
+        label.setPreferredSize(new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight()));
+        label.setIcon(imageIcon);
+    }
+
     static class MinesTimerPanel extends JPanel {
 
+        public static MinesTimer minesTimer;
         private static JLabel timer_1;
         private static JLabel timer_2;
         private static JLabel timer_3;
-        public static MinesTimer minesTimer;
 
         public MinesTimerPanel() {
             timer_1 = new JLabel();
@@ -51,8 +57,8 @@ public class MinesweeperStatusPanel extends JPanel {
 
         static class MinesTimer {
             public static boolean firstClick; //创建一个标志，只有第一次点击时，才启动计时器
+            public static int seconds; // 定义一个变量用于存储秒
             Timer timer = new Timer(); //创建一个计时器
-            int seconds; // 定义一个变量用于存储秒
             boolean started; // 定义一个变量用于标记计时器是否已经启动
             //创建执行的任务
             TimerTask timerTask = new TimerTask() {
@@ -189,11 +195,5 @@ public class MinesweeperStatusPanel extends JPanel {
                 remainingMines_3.setIcon(new ImageIcon("./src/Themes/Classic/Number_below zero.png")); // 负数的百位数不能被操作，默认为负号
             }
         }
-    }
-
-    private static void initialLabel(JLabel label) {
-        ImageIcon imageIcon = new ImageIcon("./src/Themes/Classic/Number_0.png");
-        label.setPreferredSize(new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight()));
-        label.setIcon(imageIcon);
     }
 }

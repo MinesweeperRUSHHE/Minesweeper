@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 public class MinesweeperButton extends JButton {
     private final int status; // -1是雷，0-8为附近的雷数
@@ -47,12 +48,24 @@ public class MinesweeperButton extends JButton {
                     //空且附近地雷为0
                     case 0 -> {
                         setButtonIcon();
-                        //TODO:需要一个翻开一片空格子的方法
                         MinesweeperWindows.openAllCell(xLocation, yLocation);
                     }
                     default -> setButtonIcon();
                 }
                 //TODO:在此调用检查输赢的方法
+                /*把这些加到游戏胜利里
+                //扫雷英雄榜
+                MinesweeperWindows.Recording();
+                try {
+                    MinesweeperWindows.Read();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                try {
+                    MinesweeperWindows.Write();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }*/
             }
             //右键点击
             else if (e.getButton() == MouseEvent.BUTTON3 && rightClickable) {
