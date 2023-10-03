@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -61,6 +62,22 @@ public class MinesweeperWindows {
                     minesweeperButton[i][j].setButtonIcon();
                 }
             }
+        }
+    }
+    public static void succssOrNot(){
+        int number = minesweeperButton.length * minesweeperButton[0].length;
+        for (int i = 0;i<minesweeperButton.length;i++){
+            for (int j = 0;j<minesweeperButton[0].length;j++){
+                if(!(minesweeperButton[i][j].getStatus() == -1) &&  minesweeperButton[i][j].isMinesVisible()){//遍历格子，如果格子打开不为炸弹，并且已经可见
+                    number-= 1;
+                }
+            }
+        }
+        if(number == mines){//判断雷数和剩余格子数是否相等
+            UIManager.put("OptionPane.buttonFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
+            UIManager.put("OptionPane.messageFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
+            Component mainFrame = null;
+            JOptionPane.showMessageDialog(mainFrame, "win");
         }
     }
 
@@ -412,6 +429,12 @@ public class MinesweeperWindows {
             //一个记录地雷矩阵长度的方法
             rows = matrix.length;
             columns = matrix[0].length;
+        }
+
+    }
+
+    private static class FontUIResource {
+        public FontUIResource(Font 宋体) {
         }
     }
 }
