@@ -413,7 +413,7 @@ public class MinesweeperWindows {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    JOptionPane.showMessageDialog(null, "\n初级：" + times[0] + "秒                   " + names[0] + "\n中级：" + times[1] + "秒                   " + names[1] + "\n高级：" + times[2] + "秒                   " + names[2]);
+                    JOptionPane.showMessageDialog(null, "\n初级：" + times[0] + "秒                   " + names[0] + "\n中级：" + times[1] + "秒                   " + names[1] + "\n高级：" + times[2] + "秒                   " + names[2],"扫雷英雄榜",JOptionPane.PLAIN_MESSAGE);
                 }
 
             }
