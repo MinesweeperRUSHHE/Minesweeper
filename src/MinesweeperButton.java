@@ -1,8 +1,8 @@
 import javax.swing.*;
-import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 public class MinesweeperButton extends JButton {
     private final int status; // -1是雷，0-8为附近的雷数
@@ -35,7 +35,6 @@ public class MinesweeperButton extends JButton {
             }
             //左键点击
             if (e.getButton() == MouseEvent.BUTTON1 && leftClickable) {
-                setMinesVisible(true);
                 switch (status) {
                     case -1 -> {
                         //点击后设置为爆炸的雷的图标，并调用方法暂停计时器及引爆全部地雷
@@ -45,22 +44,28 @@ public class MinesweeperButton extends JButton {
                         setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine_exploded.png"));
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                         MinesweeperWindows.detonateAllMines(xLocation, yLocation);
-                        //如果翻到雷，就直接宣布失败
-                        UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("宋体", Font.ITALIC, 13)));
-                        UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("宋体", Font.ITALIC, 13)));
-                        Component mainFrame = null;
-                        JOptionPane.showMessageDialog(mainFrame, "建议去玩会儿原神，放松一下");
                     }
                     //空且附近地雷为0
                     case 0 -> {
                         setButtonIcon();
-                        //TODO:需要一个翻开一片空格子的方法
                         MinesweeperWindows.openAllCell(xLocation, yLocation);
                     }
                     default -> setButtonIcon();
                 }
-                //TODO:在此调用检查是否赢的方法
-                MinesweeperWindows.succssOrNot();
+                //TODO:在此调用检查输赢的方法
+                /*把这些加到游戏胜利里
+                //扫雷英雄榜
+                MinesweeperWindows.Recording();
+                try {
+                    MinesweeperWindows.Read();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                try {
+                    MinesweeperWindows.Write();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }*/
             }
             //右键点击
             else if (e.getButton() == MouseEvent.BUTTON3 && rightClickable) {
@@ -88,6 +93,7 @@ public class MinesweeperButton extends JButton {
                 MinesweeperStatusPanel.faceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_smile.png"));
             }
         }
+
         @Override
         public void mouseEntered(MouseEvent e) {
 
@@ -120,7 +126,7 @@ public class MinesweeperButton extends JButton {
         return minesVisible;
     }
 
-    public  void setMinesVisible(boolean minesVisible) {
+    public void setMinesVisible(boolean minesVisible) {
         this.minesVisible = minesVisible;
     }
 

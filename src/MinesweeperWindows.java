@@ -3,10 +3,19 @@ import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 import java.util.Random;
 
 public class MinesweeperWindows {
+    public static int difficult;
+    //定义三种难度的历史记录1为低级，3为高级
+    public static int[] times = new int[3];
+    public static String[] names = new String[3];
     static JFrame minesweeper;
+    static String name;
+    static int time;
+    static File timefile;
+    static File namefile;
     private static MinesweeperButton[][] minesweeperButton;
     private static int height;
     private static int width;
@@ -81,6 +90,55 @@ public class MinesweeperWindows {
         }
     }
 
+    public static void Recording() {
+        //记录玩家昵称和时间
+        name = JOptionPane.showInputDialog(null, "胜利\n请留下您的大名", "胜利", JOptionPane.INFORMATION_MESSAGE);
+        time = MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.seconds;
+    }
+
+    //查看历史数据
+    public static void Read() throws IOException {
+        //读取历史记录
+        timefile = new File("./src/Themes/Classic/time.txt");
+        namefile = new File("./src/Themes/Classic/name.txt");
+        FileReader time_fileReader = new FileReader(timefile);
+        FileReader name_fileReader = new FileReader(namefile);
+        BufferedReader time_bufferedReader = new BufferedReader(time_fileReader);
+        BufferedReader name_bufferedReader = new BufferedReader(name_fileReader);
+        for (int i = 0; i < 3; i++) {
+            // 读取一行内容，并将其转换为整数或字符串，存储到对应的数组中
+            times[i] = Integer.parseInt(time_bufferedReader.readLine());
+            names[i] = name_bufferedReader.readLine();
+        }
+        // 关闭BufferedReader对象和FileReader对象，释放资源
+        time_bufferedReader.close();
+        time_fileReader.close();
+        name_bufferedReader.close();
+        name_fileReader.close();
+    }
+
+    //写入新数据
+    public static void Write() throws IOException {
+        //将time与历史记录比较，0为初级，1为中级，2为高级
+        //如果小于历史记录，则更新
+        if (time < times[difficult]) {
+            times[difficult] = time;
+            names[difficult] = name;
+        }
+        //写入更改后的数据
+        FileWriter time_fileWriter = new FileWriter(timefile);
+        FileWriter name_fileWriter = new FileWriter(namefile);
+        // 使用 for 循环遍历数组中的每一个元素
+        for (int i = 0; i < 3; i++) {
+            // 写入每一个元素，并在末尾添加换行符
+            time_fileWriter.write(times[i] + "\n");
+            name_fileWriter.write(names[i] + "\n");
+        }
+        // 关闭 FileWriter 对象，释放资源
+        time_fileWriter.close();
+        name_fileWriter.close();
+    }
+
     public void executeDifficultChoice() {
         /*
         choice [0,1,2,3]分别对应"低级", "中级", "高级", "自定义"
@@ -131,10 +189,6 @@ public class MinesweeperWindows {
         }
     }
 
-    /*
-    showInputDialog获取用户输入的数据
-    Integer转换为整数
-     */
     static class CustomDifficulty {
 
         private final int height;
@@ -142,10 +196,11 @@ public class MinesweeperWindows {
         private final int mines;
 
         public CustomDifficulty() {
+            //调用showInputDialog方法获取用户输入的数据
             String High = JOptionPane.showInputDialog(null, "请输入高度");
             while (checkCustomNumbers(High)) {
                 High = reEnterNumbers();
-            }
+            }//调用Integer方法把数据转换为整数
             height = Integer.parseInt(High);
 
             String Wide = JOptionPane.showInputDialog(null, "请输入宽度");
@@ -166,7 +221,7 @@ public class MinesweeperWindows {
             if (number == null) {
                 //用户关闭或取消了对话框
                 JOptionPane.showMessageDialog(null, "你取消了自定义");
-                //重新回到难度选择(有bug，有时间再改)
+                //TODO:重新回到难度选择
                 System.exit(0);
                 return false;
             } else {
@@ -218,6 +273,7 @@ public class MinesweeperWindows {
             } else {
                 //choice [0,1,2,3]分别对应"自定义", "高级", "中级", "低级"
                 JOptionPane.showMessageDialog(null, "您选择了" + options[choice]);//暂时是给你一个窗口提示难度
+                difficult = choice;
                 return choice;//对应的上面的选项
             }
         }
@@ -238,6 +294,7 @@ public class MinesweeperWindows {
             JMenuItem menuItem1_3 = new JMenuItem("高级");
             JMenuItem menuItem1_4 = new JMenuItem("自定义");
             JMenuItem menuItem1_6 = new JMenuItem("重新开始这一局");
+            JMenuItem menuItem1_7 = new JMenuItem("扫雷英雄榜");
             JMenuItem menuItem2_1 = new JMenuItem("关于");
 
             menuGames.add(menuItem1_5);
@@ -248,6 +305,7 @@ public class MinesweeperWindows {
             menuGames.add(menuItem1_4);
             menuGames.addSeparator();
             menuGames.add(menuItem1_6);
+            menuGames.add(menuItem1_7);
             menuHelps.add(menuItem2_1);
 
             menuBar.add(menuGames);
@@ -364,11 +422,24 @@ public class MinesweeperWindows {
 
             }
             menuItem1_6.addActionListener(new Item1_6Listener());
+            class Item1_7Listener implements ActionListener {
+                @Override
+                public void actionPerformed(ActionEvent arg0) {
+                    try {
+                        Read();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    JOptionPane.showMessageDialog(null, "\n初级：" + times[0] + "秒                   " + names[0] + "\n中级：" + times[1] + "秒                   " + names[1] + "\n高级：" + times[2] + "秒                   " + names[2],"扫雷英雄榜",JOptionPane.PLAIN_MESSAGE);
+                }
+
+            }
+            menuItem1_7.addActionListener(new Item1_7Listener());
             class Item2_1Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
                     //TODO:完善"关于"
-                    JOptionPane.showMessageDialog(null, "看到这条信息的人奖励2h原神");
+                    JOptionPane.showMessageDialog(null, "看到这条信息的人奖励2h原神", "关于", JOptionPane.PLAIN_MESSAGE);
 
                 }
             }
@@ -380,11 +451,6 @@ public class MinesweeperWindows {
         }
     }
 
-    /*
-    TODO:
-    扫雷英雄榜（基本完成了再写）
-    退出
-     */
     static class MainWindows {
         private int rows;
         private int columns;
