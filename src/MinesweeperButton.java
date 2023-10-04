@@ -35,6 +35,7 @@ public class MinesweeperButton extends JButton {
             }
             //左键点击
             if (e.getButton() == MouseEvent.BUTTON1 && leftClickable) {
+                setMinesVisible(true);
                 switch (status) {
                     case -1 -> {
                         //点击后设置为爆炸的雷的图标，并调用方法暂停计时器及引爆全部地雷
@@ -44,6 +45,10 @@ public class MinesweeperButton extends JButton {
                         setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine_exploded.png"));
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                         MinesweeperWindows.detonateAllMines(xLocation, yLocation);
+                        UIManager.put("OptionPane.buttonFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
+                        UIManager.put("OptionPane.messageFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
+                        Component mainFrame = null;
+                        JOptionPane.showMessageDialog(mainFrame, "建议去玩玩原神放松一下");
                     }
                     //空且附近地雷为0
                     case 0 -> {
@@ -52,6 +57,7 @@ public class MinesweeperButton extends JButton {
                     }
                     default -> setButtonIcon();
                 }
+                MinesweeperWindows.succssOrNot();
                 //TODO:在此调用检查输赢的方法
                 /*把这些加到游戏胜利里
                 //扫雷英雄榜

@@ -69,6 +69,7 @@ public class MinesweeperWindows {
             for (int j = Math.max(0, xLocation - 1); j <= Math.min(minesweeperButton[0].length - 1, xLocation + 1); j++) {
                 if (!(minesweeperButton[i][j].getStatus() == -1 && minesweeperButton[i][j].getStatus() == 0)) {
                     minesweeperButton[i][j].setButtonIcon();
+                    minesweeperButton[i][j].setMinesVisible(true);
                 }
             }
         }
@@ -86,13 +87,24 @@ public class MinesweeperWindows {
             UIManager.put("OptionPane.buttonFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
             UIManager.put("OptionPane.messageFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
             Component mainFrame = null;
-            JOptionPane.showMessageDialog(mainFrame, "win");
+            MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
+            MinesweeperWindows.Recording();
+            try {
+                MinesweeperWindows.Read();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            try {
+                MinesweeperWindows.Write();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
     public static void Recording() {
         //记录玩家昵称和时间
-        name = JOptionPane.showInputDialog(null, "胜利\n请留下您的大名", "胜利", JOptionPane.INFORMATION_MESSAGE);
+        name = JOptionPane.showInputDialog(null, "原神60级玩家太有实力了\n旅行者你的名字是？", "胜利", JOptionPane.INFORMATION_MESSAGE);
         time = MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.seconds;
     }
 
@@ -414,6 +426,7 @@ public class MinesweeperWindows {
                             minesweeperButton[i][j].setIcon(new ImageIcon("./src/Themes/Classic/Button.png"));
                             minesweeperButton[i][j].leftClickable = true;
                             minesweeperButton[i][j].rightClickable = true;
+                            minesweeperButton[i][j].setCanFlag(true);
                             minesweeperButton[i][j].setMinesVisible(false);
                         }
                     }//计时器初始化
