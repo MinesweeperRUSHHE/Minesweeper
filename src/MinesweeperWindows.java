@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -67,7 +66,7 @@ public class MinesweeperWindows {
         //显示附近没有地雷的九宫格的带数字的格子
         for (int i = Math.max(0, yLocation - 1); i <= Math.min(minesweeperButton.length - 1, yLocation + 1); i++) {
             for (int j = Math.max(0, xLocation - 1); j <= Math.min(minesweeperButton[0].length - 1, xLocation + 1); j++) {
-                if (!(minesweeperButton[i][j].getStatus() == -1 && minesweeperButton[i][j].getStatus() == 0)) {
+                if (minesweeperButton[i][j].getStatus() > 0) {
                     minesweeperButton[i][j].setButtonIcon();
                     minesweeperButton[i][j].setMinesVisible(true);
                 }
@@ -510,10 +509,5 @@ public class MinesweeperWindows {
             columns = matrix[0].length;
         }
 
-    }
-
-    private static class FontUIResource {
-        public FontUIResource(Font 宋体) {
-        }
     }
 }
