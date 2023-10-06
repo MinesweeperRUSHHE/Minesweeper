@@ -2,14 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 
 public class MinesweeperButton extends JButton {
     private final int status; // -1是雷，0-8为附近的雷数
     private final int xLocation;
     private final int yLocation;
-    public boolean leftClickable = true;
-    public boolean rightClickable = true;
+    private boolean leftClickable = true;
+    private boolean rightClickable = true;
     private boolean canFlag = true;
     private boolean belongToFlag = false;
     private boolean belongToQuestion = false;
@@ -35,7 +34,6 @@ public class MinesweeperButton extends JButton {
             }
             //左键点击
             if (e.getButton() == MouseEvent.BUTTON1 && leftClickable) {
-                setMinesVisible(true);
                 switch (status) {
                     case -1 -> {
                         //点击后设置为爆炸的雷的图标，并调用方法暂停计时器及引爆全部地雷
@@ -44,34 +42,22 @@ public class MinesweeperButton extends JButton {
                         rightClickable = false;
                         setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine_exploded.png"));
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
-                        MinesweeperWindows.detonateAllMines(xLocation, yLocation);
+                        Minesweeper.getMinesweeperWindows().detonateAllMines(xLocation, yLocation);
                         UIManager.put("OptionPane.buttonFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
                         UIManager.put("OptionPane.messageFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
-                        Component mainFrame = null;
-                        JOptionPane.showMessageDialog(mainFrame, "建议去玩玩原神放松一下");
+                        JOptionPane.showMessageDialog(null, "建议去玩玩原神放松一下");
                     }
                     //空且附近地雷为0
                     case 0 -> {
                         setButtonIcon();
-                        MinesweeperWindows.openAllCell(xLocation, yLocation);
+                        Minesweeper.getMinesweeperWindows().openAllCell(xLocation, yLocation);
                     }
-                    default -> setButtonIcon();
+                    default -> {
+                        setButtonIcon();
+                        belongToQuestion = false;
+                    }
                 }
-                MinesweeperWindows.succssOrNot();
-                //TODO:在此调用检查输赢的方法
-                /*把这些加到游戏胜利里
-                //扫雷英雄榜
-                MinesweeperWindows.Recording();
-                try {
-                    MinesweeperWindows.Read();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-                try {
-                    MinesweeperWindows.Write();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }*/
+                Minesweeper.getMinesweeperWindows().successOrNot();
             }
             //右键点击
             else if (e.getButton() == MouseEvent.BUTTON3 && rightClickable) {
@@ -170,6 +156,7 @@ public class MinesweeperButton extends JButton {
     //设置地雷按钮图标，并添加一些规则
     public void setButtonIcon() {
         canFlag = false;
+        minesVisible = true;
         ImageIcon imageIcon = new ImageIcon("./src/Themes/Classic/Button_" + status + ".png");
         setIcon(imageIcon);
     }

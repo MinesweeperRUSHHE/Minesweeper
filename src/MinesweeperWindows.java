@@ -1,40 +1,55 @@
 import javax.swing.*;
-import javax.swing.plaf.FontUIResource;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.*;
+import java.io.IOException;
 import java.util.Random;
 
 public class MinesweeperWindows {
-    public static int difficult;
-    //定义三种难度的历史记录1为低级，3为高级
-    public static int[] times = new int[3];
-    public static String[] names = new String[3];
     static JFrame minesweeper;
-    static String name;
-    static int time;
-    static File timefile;
-    static File namefile;
-    private static MinesweeperButton[][] minesweeperButton;
-    private static int height;
-    private static int width;
-    private static int mines; // 此为设置的地雷数
+    //定义三种难度的历史记录1为低级，3为高级
+    private int difficulty;
+    private MinesweeperButton[][] minesweeperButton;
+    private MinesweeperMenuBar minesweeperMenuBar;
+    private MinesweeperStatusPanel statusPanel;
+    private int height;
+    private int width;
+    private int mines; // 此为设置的地雷数
 
-    public static int getHeight() {
+    public int getDifficulty() {
+        return difficulty;
+    }
+    public int getHeight() {
         return height;
     }
 
-    public static int getWidth() {
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
         return width;
     }
 
-    public static int getMines() {
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getMines() {
         return mines;
     }
 
+    public void setMines(int mines) {
+        this.mines = mines;
+    }
+
+    public MinesweeperButton[][] getMinesweeperButton() {
+        return minesweeperButton;
+    }
+    public MinesweeperStatusPanel getStatusPanel() {
+        return statusPanel;
+    }
+
     //引爆所有地雷的方法
-    public static void detonateAllMines(int xLocation, int yLocation) {
+    public void detonateAllMines(int xLocation, int yLocation) {
         MinesweeperStatusPanel.faceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_cross-out eyes.png"));
         for (int i = 0; i < minesweeperButton.length; i++) {
             for (int j = 0; j < minesweeperButton[0].length; j++) {
@@ -48,8 +63,7 @@ public class MinesweeperWindows {
         }
     }
 
-    public static void openAllCell(int xLocation, int yLocation) {
-        minesweeperButton[yLocation][xLocation].setMinesVisible(true);
+    public void openAllCell(int xLocation, int yLocation) {
         minesweeperButton[yLocation][xLocation].setButtonIcon();
 
         if (yLocation - 1 >= 0 && minesweeperButton[yLocation - 1][xLocation].getStatus() == 0 && !minesweeperButton[yLocation - 1][xLocation].isMinesVisible()) {
@@ -67,89 +81,34 @@ public class MinesweeperWindows {
         //显示附近没有地雷的九宫格的带数字的格子
         for (int i = Math.max(0, yLocation - 1); i <= Math.min(minesweeperButton.length - 1, yLocation + 1); i++) {
             for (int j = Math.max(0, xLocation - 1); j <= Math.min(minesweeperButton[0].length - 1, xLocation + 1); j++) {
-                if (!(minesweeperButton[i][j].getStatus() == -1 && minesweeperButton[i][j].getStatus() == 0)) {
+                if (minesweeperButton[i][j].getStatus() > 0) {
                     minesweeperButton[i][j].setButtonIcon();
-                    minesweeperButton[i][j].setMinesVisible(true);
                 }
             }
         }
     }
-    public static void succssOrNot(){
+
+    public void successOrNot() {
         int number = minesweeperButton.length * minesweeperButton[0].length;
-        for (int i = 0;i<minesweeperButton.length;i++){
-            for (int j = 0;j<minesweeperButton[0].length;j++){
-                if(!(minesweeperButton[i][j].getStatus() == -1) &&  minesweeperButton[i][j].isMinesVisible()){//遍历格子，如果格子打开不为炸弹，并且已经可见
-                    number-= 1;
+        for (int i = 0; i < minesweeperButton.length; i++) {
+            for (int j = 0; j < minesweeperButton[0].length; j++) {
+                if (!(minesweeperButton[i][j].getStatus() == -1) && minesweeperButton[i][j].isMinesVisible()) {//遍历格子，如果格子打开不为炸弹，并且已经可见
+                    number -= 1;
                 }
             }
         }
-        if(number == mines){//判断雷数和剩余格子数是否相等
+        if (number == mines) {//判断雷数和剩余格子数是否相等
             UIManager.put("OptionPane.buttonFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
             UIManager.put("OptionPane.messageFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
-            Component mainFrame = null;
             MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
-            MinesweeperWindows.Recording();
             try {
-                MinesweeperWindows.Read();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-            try {
-                MinesweeperWindows.Write();
+                minesweeperMenuBar.recordBestTime();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         }
     }
 
-    public static void Recording() {
-        //记录玩家昵称和时间
-        name = JOptionPane.showInputDialog(null, "原神60级玩家太有实力了\n旅行者你的名字是？", "胜利", JOptionPane.INFORMATION_MESSAGE);
-        time = MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.seconds;
-    }
-
-    //查看历史数据
-    public static void Read() throws IOException {
-        //读取历史记录
-        timefile = new File("./src/Themes/Classic/time.txt");
-        namefile = new File("./src/Themes/Classic/name.txt");
-        FileReader time_fileReader = new FileReader(timefile);
-        FileReader name_fileReader = new FileReader(namefile);
-        BufferedReader time_bufferedReader = new BufferedReader(time_fileReader);
-        BufferedReader name_bufferedReader = new BufferedReader(name_fileReader);
-        for (int i = 0; i < 3; i++) {
-            // 读取一行内容，并将其转换为整数或字符串，存储到对应的数组中
-            times[i] = Integer.parseInt(time_bufferedReader.readLine());
-            names[i] = name_bufferedReader.readLine();
-        }
-        // 关闭BufferedReader对象和FileReader对象，释放资源
-        time_bufferedReader.close();
-        time_fileReader.close();
-        name_bufferedReader.close();
-        name_fileReader.close();
-    }
-
-    //写入新数据
-    public static void Write() throws IOException {
-        //将time与历史记录比较，0为初级，1为中级，2为高级
-        //如果小于历史记录，则更新
-        if (time < times[difficult]) {
-            times[difficult] = time;
-            names[difficult] = name;
-        }
-        //写入更改后的数据
-        FileWriter time_fileWriter = new FileWriter(timefile);
-        FileWriter name_fileWriter = new FileWriter(namefile);
-        // 使用 for 循环遍历数组中的每一个元素
-        for (int i = 0; i < 3; i++) {
-            // 写入每一个元素，并在末尾添加换行符
-            time_fileWriter.write(times[i] + "\n");
-            name_fileWriter.write(names[i] + "\n");
-        }
-        // 关闭 FileWriter 对象，释放资源
-        time_fileWriter.close();
-        name_fileWriter.close();
-    }
 
     public void executeDifficultChoice() {
         /*
@@ -158,21 +117,25 @@ public class MinesweeperWindows {
          */
         switch (new DifficultyChoice().getDifficulty()) {
             case 0 -> {
+                difficulty = 0;
                 height = 9;
                 width = 9;
                 mines = 10;
             }
             case 1 -> {
+                difficulty = 1;
                 height = 16;
                 width = 16;
                 mines = 40;
             }
             case 2 -> {
+                difficulty = 2;
                 height = 16;
                 width = 30;
                 mines = 99;
             }
             case 3 -> {
+                difficulty = 3;
                 CustomDifficulty customDifficulty = new CustomDifficulty();
                 height = customDifficulty.getHeight();
                 width = customDifficulty.getWidth();
@@ -202,7 +165,6 @@ public class MinesweeperWindows {
     }
 
     static class CustomDifficulty {
-
         private final int height;
         private final int width;
         private final int mines;
@@ -268,8 +230,7 @@ public class MinesweeperWindows {
         }
     }
 
-    static class DifficultyChoice {
-
+    class DifficultyChoice {
         //存储对话框的选项按钮
         private final Object[] options = {"低级", "中级", "高级", "自定义"};
 
@@ -285,186 +246,13 @@ public class MinesweeperWindows {
             } else {
                 //choice [0,1,2,3]分别对应"自定义", "高级", "中级", "低级"
                 JOptionPane.showMessageDialog(null, "您选择了" + options[choice]);//暂时是给你一个窗口提示难度
-                difficult = choice;
+                difficulty = choice;
                 return choice;//对应的上面的选项
             }
         }
     }
 
-    static class Menu {
-        JMenuBar menuBar;
-
-        public Menu() {
-            menuBar = new JMenuBar();// 创建菜单栏对象
-
-            JMenu menuGames = new JMenu("游戏");// 创建菜单对象
-            JMenu menuHelps = new JMenu("帮助");
-
-            JMenuItem menuItem1_5 = new JMenuItem("开局");// 创建子菜单的菜单项对象
-            JMenuItem menuItem1_1 = new JMenuItem("初级");
-            JMenuItem menuItem1_2 = new JMenuItem("中级");
-            JMenuItem menuItem1_3 = new JMenuItem("高级");
-            JMenuItem menuItem1_4 = new JMenuItem("自定义");
-            JMenuItem menuItem1_6 = new JMenuItem("重新开始这一局");
-            JMenuItem menuItem1_7 = new JMenuItem("扫雷英雄榜");
-            JMenuItem menuItem2_1 = new JMenuItem("关于");
-
-            menuGames.add(menuItem1_5);
-            menuGames.addSeparator();
-            menuGames.add(menuItem1_1);
-            menuGames.add(menuItem1_2);
-            menuGames.add(menuItem1_3);
-            menuGames.add(menuItem1_4);
-            menuGames.addSeparator();
-            menuGames.add(menuItem1_6);
-            menuGames.add(menuItem1_7);
-            menuHelps.add(menuItem2_1);
-
-            menuBar.add(menuGames);
-            menuBar.add(menuHelps);
-
-            //为菜单项添加事件监听器
-            //开局
-            class Item1_5Listener implements ActionListener {
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    //关闭计时器
-                    if (MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
-                        MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
-                    }
-                    //关闭原窗口
-                    minesweeper.dispose();
-                    //打开新窗口
-                    new MinesweeperWindows().executeMinesweeper(new boolean[MinesweeperWindows.height][MinesweeperWindows.width], MinesweeperWindows.mines);
-                }
-            }
-            menuItem1_5.addActionListener(new Item1_5Listener());
-            //初级
-            class Item1_1Listener implements ActionListener {
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    //关闭计时器
-                    if (MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
-                        MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
-                    }
-                    //关闭原窗口
-                    minesweeper.dispose();
-                    //修改数据
-                    height = 9;
-                    width = 9;
-                    mines = 10;
-                    //打开新窗口
-                    new MinesweeperWindows().executeMinesweeper(new boolean[MinesweeperWindows.height][MinesweeperWindows.width], MinesweeperWindows.mines);
-                }
-            }
-            menuItem1_1.addActionListener(new Item1_1Listener());
-            //中级
-            class Item1_2Listener implements ActionListener {
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    //关闭计时器
-                    if (MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
-                        MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
-                    }
-                    //关闭原窗口
-                    minesweeper.dispose();
-                    //修改数据
-                    height = 16;
-                    width = 16;
-                    mines = 40;
-                    //打开新窗口
-                    new MinesweeperWindows().executeMinesweeper(new boolean[MinesweeperWindows.height][MinesweeperWindows.width], MinesweeperWindows.mines);
-                }
-            }
-            menuItem1_2.addActionListener(new Item1_2Listener());
-            //高级
-            class Item1_3Listener implements ActionListener {
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    //关闭计时器
-                    if (MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
-                        MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
-                    }
-                    //关闭原窗口
-                    minesweeper.dispose();
-                    //修改数据
-                    height = 16;
-                    width = 30;
-                    mines = 99;
-                    //打开新窗口
-                    new MinesweeperWindows().executeMinesweeper(new boolean[MinesweeperWindows.height][MinesweeperWindows.width], MinesweeperWindows.mines);
-                }
-            }
-            menuItem1_3.addActionListener(new Item1_3Listener());
-            //自定义
-            class Item1_4Listener implements ActionListener {
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    if (MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
-                        MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
-                    }
-                    //关闭原窗口
-                    minesweeper.dispose();
-                    //打开新窗口
-                    CustomDifficulty customDifficulty = new CustomDifficulty();
-                    new MinesweeperWindows().executeMinesweeper(new boolean[customDifficulty.getHeight()][customDifficulty.getWidth()], customDifficulty.getMines());
-                }
-            }
-            menuItem1_4.addActionListener(new Item1_4Listener());
-            //重新开始这一局
-            class Item1_6Listener implements ActionListener {
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    //关闭计时器
-                    if (MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
-                        MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
-                    }
-                    //遍历所有格子，将他们设置为初始状态
-                    int i, j;
-                    for (i = 0; i < MinesweeperWindows.height; i++) {
-                        for (j = 0; j < MinesweeperWindows.width; j++) {
-                            minesweeperButton[i][j].setIcon(new ImageIcon("./src/Themes/Classic/Button.png"));
-                            minesweeperButton[i][j].leftClickable = true;
-                            minesweeperButton[i][j].rightClickable = true;
-                            minesweeperButton[i][j].setCanFlag(true);
-                            minesweeperButton[i][j].setMinesVisible(false);
-                        }
-                    }//计时器初始化
-                    MinesweeperStatusPanel.MinesTimerPanel.minesTimer = new MinesweeperStatusPanel.MinesTimerPanel.MinesTimer();
-                }
-
-            }
-            menuItem1_6.addActionListener(new Item1_6Listener());
-            class Item1_7Listener implements ActionListener {
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    try {
-                        Read();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    JOptionPane.showMessageDialog(null, "\n初级：" + times[0] + "秒                   " + names[0] + "\n中级：" + times[1] + "秒                   " + names[1] + "\n高级：" + times[2] + "秒                   " + names[2],"扫雷英雄榜",JOptionPane.PLAIN_MESSAGE);
-                }
-
-            }
-            menuItem1_7.addActionListener(new Item1_7Listener());
-            class Item2_1Listener implements ActionListener {
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    //TODO:完善"关于"
-                    JOptionPane.showMessageDialog(null, "看到这条信息的人奖励2h原神", "关于", JOptionPane.PLAIN_MESSAGE);
-
-                }
-            }
-            menuItem2_1.addActionListener(new Item2_1Listener());
-        }
-
-        public JMenuBar getJMenuBar() {
-            return menuBar;
-        }
-    }
-
-    static class MainWindows {
+    class MainWindows {
         private int rows;
         private int columns;
 
@@ -481,10 +269,11 @@ public class MinesweeperWindows {
 
         public void executeMinesweeper() {
             minesweeper = new JFrame("扫雷");
-            minesweeper.setJMenuBar(new Menu().getJMenuBar());
+            minesweeperMenuBar = new MinesweeperMenuBar();
+            minesweeper.setJMenuBar(minesweeperMenuBar);
             minesweeper.setLayout(new BorderLayout()); // 设置边框布局管理器
 
-            MinesweeperStatusPanel statusPanel = new MinesweeperStatusPanel(); // 显示状态的面板
+            statusPanel = new MinesweeperStatusPanel(); // 显示状态的面板
             JPanel minesPanel = new JPanel(); // 放置地雷的面板
 
             minesPanel.setLayout(new GridLayout(rows, columns, 0, 0)); // 使用网格布局管理器管理地雷按钮
@@ -508,12 +297,6 @@ public class MinesweeperWindows {
             //一个记录地雷矩阵长度的方法
             rows = matrix.length;
             columns = matrix[0].length;
-        }
-
-    }
-
-    private static class FontUIResource {
-        public FontUIResource(Font 宋体) {
         }
     }
 }
