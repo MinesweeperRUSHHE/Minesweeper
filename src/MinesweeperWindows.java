@@ -73,7 +73,7 @@ public class MinesweeperWindows {
             }
         }
     }
-    public static void succssOrNot(){
+    public static void successOrNot(){
         int number = minesweeperButton.length * minesweeperButton[0].length;
         for (int i = 0;i<minesweeperButton.length;i++){
             for (int j = 0;j<minesweeperButton[0].length;j++){

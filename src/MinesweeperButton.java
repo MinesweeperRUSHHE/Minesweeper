@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 
 public class MinesweeperButton extends JButton {
     private final int status; // -1是雷，0-8为附近的雷数
@@ -57,7 +56,7 @@ public class MinesweeperButton extends JButton {
                     }
                     default -> setButtonIcon();
                 }
-                MinesweeperWindows.succssOrNot();
+                MinesweeperWindows.successOrNot();
                 //TODO:在此调用检查输赢的方法
                 /*把这些加到游戏胜利里
                 //扫雷英雄榜
