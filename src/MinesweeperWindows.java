@@ -4,15 +4,9 @@ import java.io.*;
 import java.util.Random;
 
 public class MinesweeperWindows {
-    public static int difficult;
+    public static int difficulty;
     //定义三种难度的历史记录1为低级，3为高级
-    public static int[] times = new int[3];
-    public static String[] names = new String[3];
     static JFrame minesweeper;
-    static String name;
-    static int time;
-    static File timefile;
-    static File namefile;
     static MinesweeperButton[][] minesweeperButton;
     static int height;
     static int width;
@@ -71,7 +65,7 @@ public class MinesweeperWindows {
             }
         }
     }
-    public static void successOrNot(){
+    public static void successOrNot() throws IOException {
         int number = minesweeperButton.length * minesweeperButton[0].length;
         for (int i = 0;i<minesweeperButton.length;i++){
             for (int j = 0;j<minesweeperButton[0].length;j++){
@@ -83,69 +77,16 @@ public class MinesweeperWindows {
         if(number == mines){//判断雷数和剩余格子数是否相等
             UIManager.put("OptionPane.buttonFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
             UIManager.put("OptionPane.messageFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
-            Component mainFrame = null;
             MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
-            MinesweeperWindows.recordBestTime();
-            try {
-                MinesweeperWindows.readBestTime();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-            try {
-                MinesweeperWindows.writeBestTime();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+            if (difficulty != 3) {
+                MinesweeperMenuBar.MinesweeperMenuGames.BestTimes.recordBestTime();
+                try {
+                    MinesweeperMenuBar.MinesweeperMenuGames.BestTimes.writeBestTime();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         }
-    }
-
-    public static void recordBestTime() {
-        //记录玩家昵称和时间
-        name = JOptionPane.showInputDialog(null, "原神60级玩家太有实力了\n旅行者你的名字是？", "胜利", JOptionPane.INFORMATION_MESSAGE);
-        time = MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.seconds;
-    }
-
-    //查看历史数据
-    public static void readBestTime() throws IOException {
-        //读取历史记录
-        timefile = new File("./src/Themes/Classic/time.txt");
-        namefile = new File("./src/Themes/Classic/name.txt");
-        FileReader time_fileReader = new FileReader(timefile);
-        FileReader name_fileReader = new FileReader(namefile);
-        BufferedReader time_bufferedReader = new BufferedReader(time_fileReader);
-        BufferedReader name_bufferedReader = new BufferedReader(name_fileReader);
-        for (int i = 0; i < 3; i++) {
-            // 读取一行内容，并将其转换为整数或字符串，存储到对应的数组中
-            times[i] = Integer.parseInt(time_bufferedReader.readLine());
-            names[i] = name_bufferedReader.readLine();
-        }
-        // 关闭BufferedReader对象和FileReader对象，释放资源
-        time_bufferedReader.close();
-        time_fileReader.close();
-        name_bufferedReader.close();
-        name_fileReader.close();
-    }
-
-    //写入新数据
-    public static void writeBestTime() throws IOException {
-        //将time与历史记录比较，0为初级，1为中级，2为高级
-        //如果小于历史记录，则更新
-        if (time < times[difficult]) {
-            times[difficult] = time;
-            names[difficult] = name;
-        }
-        //写入更改后的数据
-        FileWriter time_fileWriter = new FileWriter(timefile);
-        FileWriter name_fileWriter = new FileWriter(namefile);
-        // 使用 for 循环遍历数组中的每一个元素
-        for (int i = 0; i < 3; i++) {
-            // 写入每一个元素，并在末尾添加换行符
-            time_fileWriter.write(times[i] + "\n");
-            name_fileWriter.write(names[i] + "\n");
-        }
-        // 关闭 FileWriter 对象，释放资源
-        time_fileWriter.close();
-        name_fileWriter.close();
     }
 
     public void executeDifficultChoice() {
@@ -155,21 +96,25 @@ public class MinesweeperWindows {
          */
         switch (new DifficultyChoice().getDifficulty()) {
             case 0 -> {
+                difficulty = 0;
                 height = 9;
                 width = 9;
                 mines = 10;
             }
             case 1 -> {
+                difficulty = 1;
                 height = 16;
                 width = 16;
                 mines = 40;
             }
             case 2 -> {
+                difficulty = 2;
                 height = 16;
                 width = 30;
                 mines = 99;
             }
             case 3 -> {
+                difficulty = 3;
                 CustomDifficulty customDifficulty = new CustomDifficulty();
                 height = customDifficulty.getHeight();
                 width = customDifficulty.getWidth();
@@ -282,7 +227,7 @@ public class MinesweeperWindows {
             } else {
                 //choice [0,1,2,3]分别对应"自定义", "高级", "中级", "低级"
                 JOptionPane.showMessageDialog(null, "您选择了" + options[choice]);//暂时是给你一个窗口提示难度
-                difficult = choice;
+                difficulty = choice;
                 return choice;//对应的上面的选项
             }
         }
