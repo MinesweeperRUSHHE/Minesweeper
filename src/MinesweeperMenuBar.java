@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
@@ -137,6 +138,7 @@ class MinesweeperMenuBar extends JMenuBar {
                     if (MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                     }
+                    MinesweeperStatusPanel.remainingMinesPanel.resetMine();
                     //遍历所有格子，将他们设置为初始状态
                     int i, j;
                     for (i = 0; i < MinesweeperWindows.height; i++) {
@@ -170,7 +172,7 @@ class MinesweeperMenuBar extends JMenuBar {
         static class BestTimes {
             private static final String[] difficult = {"easy", "medium", "hard"};
             private static final String[] bestName = new String[3];
-            static Properties prop = new Properties();
+            private static final Properties prop = new Properties();
             private static int time;
             private static String name;
             private static int difficulty;
@@ -180,11 +182,9 @@ class MinesweeperMenuBar extends JMenuBar {
                 readBestTime();
             }
 
-            public static void recordBestTime() throws IOException {
+            public static void recordBestTime() {
                 //记录玩家昵称和时间
                 name = JOptionPane.showInputDialog(null, "原神60级玩家太有实力了\n旅行者你的名字是？", "胜利", JOptionPane.INFORMATION_MESSAGE);
-                time = MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.seconds;
-                writeBestTime();
             }
 
             //查看历史数据
@@ -214,9 +214,12 @@ class MinesweeperMenuBar extends JMenuBar {
 
             //写入新数据
             public static void writeBestTime() throws IOException {
+                readBestTime(); // 确保英雄榜文件存在
+                time = MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.seconds;
                 //将time与历史记录比较，0为初级，1为中级，2为高级
                 //如果小于历史记录，则更新
                 if (time < Integer.parseInt(prop.getProperty(difficult[difficulty] + "Time"))) {
+                    recordBestTime();
                     prop.setProperty(difficult[difficulty] + "Time", String.valueOf(time));
                     prop.setProperty(difficult[difficulty] + "Name", name);
                     prop.store(new FileOutputStream("bestTime.properties"), null);
@@ -238,10 +241,23 @@ class MinesweeperMenuBar extends JMenuBar {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
                     //TODO:完善"关于"
-                    JOptionPane.showMessageDialog(null, "看到这条信息的人奖励2h原神", "关于", JOptionPane.PLAIN_MESSAGE);
+                    new AboutDialog().setVisible(true);
                 }
             }
             menuItem2_1.addActionListener(new Item2_1Listener());
+        }
+
+        static class AboutDialog extends JDialog {
+            public AboutDialog() {
+                super((Frame) null, "关于", true);
+                JPanel aboutPanel = new JPanel();
+                aboutPanel.setLayout(new FlowLayout());
+                aboutPanel.add(new JLabel(new ImageIcon("./src/Themes/Classic/Button.png")), FlowLayout.LEFT);
+                aboutPanel.add(new JLabel("芝士一个不成熟的扫雷软件，如果发现有bug，欢迎通过提交issue或者pull request"), FlowLayout.CENTER);
+                add(aboutPanel); // 将aboutPanel添加到对话框的内容面板中
+                pack(); // 窗口自动大小
+                setLocationRelativeTo(null); //设置居中
+            }
         }
     }
 }

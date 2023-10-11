@@ -170,6 +170,11 @@ public class MinesweeperStatusPanel extends JPanel {
             add(remainingMines_1);
         }
 
+        public void resetMine() {
+            minesNumber = MinesweeperWindows.getMines();
+            setLabelIcon();
+        }
+
         //增加显示地雷数量的方法
         public void addMine() {
             minesNumber++;

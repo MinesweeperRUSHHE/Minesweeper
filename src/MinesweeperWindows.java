@@ -43,28 +43,19 @@ public class MinesweeperWindows {
         minesweeperButton[yLocation][xLocation].setMinesVisible(true);
         minesweeperButton[yLocation][xLocation].setButtonIcon();
 
-        if (yLocation - 1 >= 0 && minesweeperButton[yLocation - 1][xLocation].getStatus() == 0 && !minesweeperButton[yLocation - 1][xLocation].isMinesVisible()) {
-            openAllCell(xLocation, yLocation - 1);
-        }
-        if (yLocation + 1 < minesweeperButton.length && minesweeperButton[yLocation + 1][xLocation].getStatus() == 0 && !minesweeperButton[yLocation + 1][xLocation].isMinesVisible()) {
-            openAllCell(xLocation, yLocation + 1);
-        }
-        if (xLocation - 1 >= 0 && minesweeperButton[yLocation][xLocation - 1].getStatus() == 0 && !minesweeperButton[yLocation][xLocation - 1].isMinesVisible()) {
-            openAllCell(xLocation - 1, yLocation);
-        }
-        if (xLocation + 1 < minesweeperButton[0].length && minesweeperButton[yLocation][xLocation + 1].getStatus() == 0 && !minesweeperButton[yLocation][xLocation + 1].isMinesVisible()) {
-            openAllCell(xLocation + 1, yLocation);
-        }
         //显示附近没有地雷的九宫格的带数字的格子
         for (int i = Math.max(0, yLocation - 1); i <= Math.min(minesweeperButton.length - 1, yLocation + 1); i++) {
             for (int j = Math.max(0, xLocation - 1); j <= Math.min(minesweeperButton[0].length - 1, xLocation + 1); j++) {
-                if (minesweeperButton[i][j].getStatus() > 0) {
+                if (minesweeperButton[i][j].getStatus() == 0 && !minesweeperButton[i][j].isMinesVisible() && !(i == yLocation && j == xLocation)) {
+                    openAllCell(j, i);
+                } else if (minesweeperButton[i][j].getStatus() > 0) {
                     minesweeperButton[i][j].setButtonIcon();
                     minesweeperButton[i][j].setMinesVisible(true);
                 }
             }
         }
     }
+
     public static void successOrNot() throws IOException {
         int number = minesweeperButton.length * minesweeperButton[0].length;
         for (int i = 0;i<minesweeperButton.length;i++){
@@ -75,11 +66,16 @@ public class MinesweeperWindows {
             }
         }
         if(number == mines){//判断雷数和剩余格子数是否相等
-            UIManager.put("OptionPane.buttonFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
-            UIManager.put("OptionPane.messageFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
+            for (int i = 0; i < minesweeperButton.length; i++) {
+                for (int j = 0; j < minesweeperButton[0].length; j++) {
+                    minesweeperButton[i][j].setButtonIcon();
+                    if (minesweeperButton[i][j].getStatus() == -1) {
+                        minesweeperButton[i][j].setIcon(new ImageIcon("./src/Themes/Classic/Button_flag.png"));
+                    }
+                }
+            }
             MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
             if (difficulty != 3) {
-                MinesweeperMenuBar.MinesweeperMenuGames.BestTimes.recordBestTime();
                 try {
                     MinesweeperMenuBar.MinesweeperMenuGames.BestTimes.writeBestTime();
                 } catch (IOException ex) {
@@ -144,7 +140,6 @@ public class MinesweeperWindows {
     }
 
     static class CustomDifficulty {
-
         private final int height;
         private final int width;
         private final int mines;
@@ -278,6 +273,5 @@ public class MinesweeperWindows {
             rows = matrix.length;
             columns = matrix[0].length;
         }
-
     }
 }
