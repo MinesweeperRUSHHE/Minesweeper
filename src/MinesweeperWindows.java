@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class MinesweeperWindows {
@@ -25,13 +26,14 @@ public class MinesweeperWindows {
     }
 
     //引爆所有地雷的方法
-    public static void detonateAllMines(int xLocation, int yLocation) {
+    public static void detonateAllMines() {
+        MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
         MinesweeperStatusPanel.faceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_cross-out eyes.png"));
         for (int i = 0; i < minesweeperButton.length; i++) {
             for (int j = 0; j < minesweeperButton[0].length; j++) {
                 minesweeperButton[i][j].setLeftClickable(false);
                 minesweeperButton[i][j].setRightClickable(false);
-                if (minesweeperButton[i][j].getStatus() == -1 && !(i == yLocation && j == xLocation)) {
+                if (minesweeperButton[i][j].getStatus() == -1) {
                     minesweeperButton[i][j].setMinesVisible(true);
                     minesweeperButton[i][j].setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine.png"));
                 }
@@ -80,6 +82,47 @@ public class MinesweeperWindows {
                     MinesweeperMenuBar.MinesweeperMenuGames.BestTimes.writeBestTime();
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
+                }
+            }
+        }
+    }
+
+    public static void executeDoubleClick(int xLocation, int yLocation) {
+        ArrayList<MinesweeperButton> flagButton = new ArrayList<>();
+        ArrayList<MinesweeperButton> button = new ArrayList<>();
+        ArrayList<MinesweeperButton> errorButton = new ArrayList<>();
+
+        for (int i = Math.max(0, yLocation - 1); i <= Math.min(minesweeperButton.length - 1, yLocation + 1); i++) {
+            for (int j = Math.max(0, xLocation - 1); j <= Math.min(minesweeperButton[0].length - 1, xLocation + 1); j++) {
+                if (minesweeperButton[i][j].isBelongToFlag()) {
+                    flagButton.add(minesweeperButton[i][j]);
+                }
+                if (minesweeperButton[i][j].isMinesVisible()) {
+                    continue;
+                }
+                //表示标记错误了
+                if (minesweeperButton[i][j].isBelongToFlag()) {
+                    if (!(minesweeperButton[i][j].getStatus() == -1)) {
+                        errorButton.add(minesweeperButton[i][j]);
+                    }
+                } else {
+                    button.add(minesweeperButton[i][j]);
+                }
+            }
+        }
+        if (minesweeperButton[yLocation][xLocation].getStatus() == flagButton.size()) {
+            //标错雷爆炸
+            if (!errorButton.isEmpty()) {
+                detonateAllMines();
+                for (MinesweeperButton error : errorButton) {
+                    error.setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine_error.png"));
+                }
+                return;
+            }
+
+            for (MinesweeperButton btn : button) {
+                if (btn.getStatus() != -1) {
+                    openAllCell(xLocation, yLocation);
                 }
             }
         }

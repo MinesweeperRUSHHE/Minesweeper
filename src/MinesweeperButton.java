@@ -13,6 +13,7 @@ public class MinesweeperButton extends JButton {
     private boolean canFlag = true;
     private boolean belongToFlag = false;
     private boolean belongToQuestion = false;
+    private boolean bothPressed = false;
     private boolean minesVisible = false;//false为不可见，true为可见
     MouseListener mouseListener = new MouseListener() {
         @Override
@@ -22,6 +23,15 @@ public class MinesweeperButton extends JButton {
 
         @Override
         public void mousePressed(MouseEvent e) {
+            // 定义一个掩码，表示同时按下鼠标左键和右键
+            int action = MouseEvent.BUTTON1_DOWN_MASK | MouseEvent.BUTTON3_DOWN_MASK;
+            // 判断鼠标事件的修饰符是否与掩码相同
+            if ((e.getModifiersEx() & action) == action) {
+                // 如果相同，就执行你想要的操作
+                System.out.println("同时按下了左键和右键");
+                MinesweeperWindows.executeDoubleClick(xLocation, yLocation);
+                bothPressed = true; // 同时按下了左键和右键，不触发MouseReleased监听器
+            }
             if (leftClickable || rightClickable) {
                 MinesweeperStatusPanel.faceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_astonished.png")); //按下时为疑惑
             }
@@ -33,6 +43,11 @@ public class MinesweeperButton extends JButton {
                 MinesweeperStatusPanel.MinesTimerPanel.minesTimer.start(); //启动计时器
                 MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.firstClick = false;
             }
+            //表示左右键同时按下，不触发操作
+            if (bothPressed) {
+                bothPressed = false;
+                return;
+            }
             //左键点击
             if (e.getButton() == MouseEvent.BUTTON1 && leftClickable) {
                 setMinesVisible(true);
@@ -42,9 +57,8 @@ public class MinesweeperButton extends JButton {
                         canFlag = false;
                         leftClickable = false;
                         rightClickable = false;
+                        MinesweeperWindows.detonateAllMines();
                         setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine_exploded.png"));
-                        MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
-                        MinesweeperWindows.detonateAllMines(xLocation, yLocation);
 //                        UIManager.put("OptionPane.buttonFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
 //                        UIManager.put("OptionPane.messageFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
 //                        Component mainFrame = null;
@@ -100,7 +114,6 @@ public class MinesweeperButton extends JButton {
 
         }
     };
-
     public MinesweeperButton(int xLocation, int yLocation, boolean[][] status) {
         //设置按钮的尺寸及图标
         ImageIcon imageIcon = new ImageIcon("./src/Themes/Classic/Button.png");
@@ -116,6 +129,10 @@ public class MinesweeperButton extends JButton {
         }
         //添加按钮的点击事件，可以根据自己的逻辑来实现
         addMouseListener(mouseListener);
+    }
+
+    public boolean isBelongToFlag() {
+        return belongToFlag;
     }
 
     public boolean isMinesVisible() {
@@ -160,7 +177,10 @@ public class MinesweeperButton extends JButton {
     //设置地雷按钮图标，并添加一些规则
     public void setButtonIcon() {
         canFlag = false;
-        ImageIcon imageIcon = new ImageIcon("./src/Themes/Classic/Button_" + status + ".png");
-        setIcon(imageIcon);
+        if (status == -1) {
+            setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine.png"));
+        } else {
+            setIcon(new ImageIcon("./src/Themes/Classic/Button_" + status + ".png"));
+        }
     }
 }
