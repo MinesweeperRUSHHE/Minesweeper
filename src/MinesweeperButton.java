@@ -11,6 +11,11 @@ public class MinesweeperButton extends JButton {
     public boolean leftClickable = true;
     public boolean rightClickable = true;
     private boolean canFlag = true;
+
+    public void setBelongToFlag(boolean belongToFlag) {
+        this.belongToFlag = belongToFlag;
+    }
+
     private boolean belongToFlag = false;
     private boolean belongToQuestion = false;
     private boolean bothPressed = false;
@@ -29,7 +34,9 @@ public class MinesweeperButton extends JButton {
             if ((e.getModifiersEx() & action) == action) {
                 // 如果相同，就执行你想要的操作
                 System.out.println("同时按下了左键和右键");
-                MinesweeperWindows.executeDoubleClick(xLocation, yLocation);
+                if (minesVisible && status > 0) {
+                    MinesweeperWindows.executeDoubleClick(xLocation, yLocation);
+                }
                 bothPressed = true; // 同时按下了左键和右键，不触发MouseReleased监听器
             }
             if (leftClickable || rightClickable) {
@@ -50,32 +57,7 @@ public class MinesweeperButton extends JButton {
             }
             //左键点击
             if (e.getButton() == MouseEvent.BUTTON1 && leftClickable) {
-                setMinesVisible(true);
-                switch (status) {
-                    case -1 -> {
-                        //点击后设置为爆炸的雷的图标，并调用方法暂停计时器及引爆全部地雷
-                        canFlag = false;
-                        leftClickable = false;
-                        rightClickable = false;
-                        MinesweeperWindows.detonateAllMines();
-                        setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine_exploded.png"));
-//                        UIManager.put("OptionPane.buttonFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
-//                        UIManager.put("OptionPane.messageFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
-//                        Component mainFrame = null;
-//                        JOptionPane.showMessageDialog(mainFrame, "建议去玩玩原神放松一下");
-                    }
-                    //空且附近地雷为0
-                    case 0 -> {
-                        setButtonIcon();
-                        MinesweeperWindows.openAllCell(xLocation, yLocation);
-                    }
-                    default -> setButtonIcon();
-                }
-                try {
-                    MinesweeperWindows.successOrNot();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
+                clickButton();
             }
             //右键点击
             else if (e.getButton() == MouseEvent.BUTTON3 && rightClickable) {
@@ -181,6 +163,35 @@ public class MinesweeperButton extends JButton {
             setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine.png"));
         } else {
             setIcon(new ImageIcon("./src/Themes/Classic/Button_" + status + ".png"));
+        }
+    }
+
+    public void clickButton() {
+        setMinesVisible(true);
+        switch (status) {
+            case -1 -> {
+                //点击后设置为爆炸的雷的图标，并调用方法暂停计时器及引爆全部地雷
+                canFlag = false;
+                leftClickable = false;
+                rightClickable = false;
+                MinesweeperWindows.detonateAllMines();
+                setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine_exploded.png"));
+//                        UIManager.put("OptionPane.buttonFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
+//                        UIManager.put("OptionPane.messageFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
+//                        Component mainFrame = null;
+//                        JOptionPane.showMessageDialog(mainFrame, "建议去玩玩原神放松一下");
+            }
+            //空且附近地雷为0
+            case 0 -> {
+                setButtonIcon();
+                MinesweeperWindows.openAllCell(xLocation, yLocation);
+            }
+            default -> setButtonIcon();
+        }
+        try {
+            MinesweeperWindows.successOrNot();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
     }
 }

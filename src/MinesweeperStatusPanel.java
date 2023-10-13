@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -147,13 +148,15 @@ public class MinesweeperStatusPanel extends JPanel {
     }
 
     static class RemainingMinesPanel extends JPanel {
+        private static int initialMinesNumber;
         private static int minesNumber; // 显示地雷的数量
         private final JLabel remainingMines_1; // 个位数
         private final JLabel remainingMines_2; // 十位数
         private final JLabel remainingMines_3; // 百位数
 
         public RemainingMinesPanel() {
-            minesNumber = MinesweeperWindows.getMines();
+            initialMinesNumber = MinesweeperWindows.getMines();
+            minesNumber = initialMinesNumber;
 
             remainingMines_1 = new JLabel();
             remainingMines_2 = new JLabel();
@@ -171,7 +174,6 @@ public class MinesweeperStatusPanel extends JPanel {
         }
 
         public void resetMine() {
-            minesNumber = MinesweeperWindows.getMines();
             setLabelIcon();
         }
 
@@ -187,7 +189,18 @@ public class MinesweeperStatusPanel extends JPanel {
             setLabelIcon();
         }
 
-        private void setLabelIcon() {
+        public static void setMinesNumber() {
+            minesNumber = initialMinesNumber;
+            for (int i = 0; i < MinesweeperWindows.minesweeperButton.length; i++) {
+                for (int j = 0; j < MinesweeperWindows.minesweeperButton[0].length; j++) {
+                    if (MinesweeperWindows.minesweeperButton[i][j].isBelongToFlag()) {
+                        minesNumber--;
+                    }
+                }
+            }
+        }
+
+        public void setLabelIcon() {
             if (minesNumber >= 0) {
                 int numbers = Math.min(minesNumber, 999); // 最大值不能超过999
                 remainingMines_1.setIcon(new ImageIcon("./src/Themes/Classic/Number_" + numbers % 10 + ".png"));

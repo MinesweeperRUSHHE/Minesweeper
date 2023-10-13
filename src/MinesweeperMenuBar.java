@@ -138,7 +138,6 @@ class MinesweeperMenuBar extends JMenuBar {
                     if (MinesweeperStatusPanel.MinesTimerPanel.minesTimer != null) {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                     }
-                    MinesweeperStatusPanel.remainingMinesPanel.resetMine();
                     //遍历所有格子，将他们设置为初始状态
                     int i, j;
                     for (i = 0; i < MinesweeperWindows.height; i++) {
@@ -147,9 +146,13 @@ class MinesweeperMenuBar extends JMenuBar {
                             MinesweeperWindows.minesweeperButton[i][j].leftClickable = true;
                             MinesweeperWindows.minesweeperButton[i][j].rightClickable = true;
                             MinesweeperWindows.minesweeperButton[i][j].setCanFlag(true);
+                            MinesweeperWindows.minesweeperButton[i][j].setBelongToFlag(false);
                             MinesweeperWindows.minesweeperButton[i][j].setMinesVisible(false);
                         }
-                    }//计时器初始化
+                    }
+                    MinesweeperStatusPanel.RemainingMinesPanel.setMinesNumber();
+                    MinesweeperStatusPanel.remainingMinesPanel.setLabelIcon();
+                    //计时器初始化
                     MinesweeperStatusPanel.MinesTimerPanel.minesTimer = new MinesweeperStatusPanel.MinesTimerPanel.MinesTimer();
                 }
 

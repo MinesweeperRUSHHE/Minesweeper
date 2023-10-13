@@ -44,6 +44,10 @@ public class MinesweeperWindows {
     public static void openAllCell(int xLocation, int yLocation) {
         minesweeperButton[yLocation][xLocation].setMinesVisible(true);
         minesweeperButton[yLocation][xLocation].setButtonIcon();
+        //防止在空格子上插旗子
+        if (minesweeperButton[yLocation][xLocation].getStatus() == 0 && minesweeperButton[yLocation][xLocation].isBelongToFlag()) {
+            minesweeperButton[yLocation][xLocation].setBelongToFlag(false);
+        }
 
         //显示附近没有地雷的九宫格的带数字的格子
         for (int i = Math.max(0, yLocation - 1); i <= Math.min(minesweeperButton.length - 1, yLocation + 1); i++) {
@@ -73,6 +77,8 @@ public class MinesweeperWindows {
                     minesweeperButton[i][j].setButtonIcon();
                     if (minesweeperButton[i][j].getStatus() == -1) {
                         minesweeperButton[i][j].setIcon(new ImageIcon("./src/Themes/Classic/Button_flag.png"));
+                        minesweeperButton[i][j].setLeftClickable(false);
+                        minesweeperButton[i][j].setRightClickable(false);
                     }
                 }
             }
@@ -85,45 +91,28 @@ public class MinesweeperWindows {
                 }
             }
         }
+        MinesweeperStatusPanel.RemainingMinesPanel.setMinesNumber();
+        MinesweeperStatusPanel.remainingMinesPanel.setLabelIcon();
     }
 
     public static void executeDoubleClick(int xLocation, int yLocation) {
         ArrayList<MinesweeperButton> flagButton = new ArrayList<>();
         ArrayList<MinesweeperButton> button = new ArrayList<>();
-        ArrayList<MinesweeperButton> errorButton = new ArrayList<>();
 
         for (int i = Math.max(0, yLocation - 1); i <= Math.min(minesweeperButton.length - 1, yLocation + 1); i++) {
             for (int j = Math.max(0, xLocation - 1); j <= Math.min(minesweeperButton[0].length - 1, xLocation + 1); j++) {
-                if (minesweeperButton[i][j].isBelongToFlag()) {
-                    flagButton.add(minesweeperButton[i][j]);
-                }
-                if (minesweeperButton[i][j].isMinesVisible()) {
-                    continue;
-                }
-                //表示标记错误了
-                if (minesweeperButton[i][j].isBelongToFlag()) {
-                    if (!(minesweeperButton[i][j].getStatus() == -1)) {
-                        errorButton.add(minesweeperButton[i][j]);
+                if (!minesweeperButton[i][j].isMinesVisible()) {
+                    if (minesweeperButton[i][j].isBelongToFlag()) {
+                        flagButton.add(minesweeperButton[i][j]);
+                    } else {
+                        button.add(minesweeperButton[i][j]);
                     }
-                } else {
-                    button.add(minesweeperButton[i][j]);
                 }
             }
         }
-        if (minesweeperButton[yLocation][xLocation].getStatus() == flagButton.size()) {
-            //标错雷爆炸
-            if (!errorButton.isEmpty()) {
-                detonateAllMines();
-                for (MinesweeperButton error : errorButton) {
-                    error.setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine_error.png"));
-                }
-                return;
-            }
-
+        if (minesweeperButton[yLocation][xLocation].getStatus() > 0 && minesweeperButton[yLocation][xLocation].getStatus() <= flagButton.size()) {
             for (MinesweeperButton btn : button) {
-                if (btn.getStatus() != -1) {
-                    openAllCell(xLocation, yLocation);
-                }
+                btn.clickButton();
             }
         }
     }
@@ -308,6 +297,7 @@ public class MinesweeperWindows {
             minesweeper.pack(); // 设置自动窗口大小
             minesweeper.setLocationRelativeTo(null); // 设置窗口居中
             minesweeper.setVisible(true); // 设置窗口可见
+            minesweeper.setResizable(false); // 设置窗口不能调整大小
             minesweeper.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 设置窗口关闭方式
         }
 
