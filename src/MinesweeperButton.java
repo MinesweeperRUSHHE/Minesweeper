@@ -176,10 +176,6 @@ public class MinesweeperButton extends JButton {
                 rightClickable = false;
                 MinesweeperWindows.detonateAllMines();
                 setIcon(new ImageIcon("./src/Themes/Classic/Button_Mine_exploded.png"));
-//                        UIManager.put("OptionPane.buttonFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
-//                        UIManager.put("OptionPane.messageFont", new javax.swing.plaf.FontUIResource(new Font("宋体", Font.ITALIC, 13)));
-//                        Component mainFrame = null;
-//                        JOptionPane.showMessageDialog(mainFrame, "建议去玩玩原神放松一下");
             }
             //空且附近地雷为0
             case 0 -> {

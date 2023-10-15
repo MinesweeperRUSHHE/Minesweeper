@@ -243,7 +243,6 @@ class MinesweeperMenuBar extends JMenuBar {
             class Item2_1Listener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                    //TODO:完善"关于"
                     new AboutDialog().setVisible(true);
                 }
             }
@@ -254,9 +253,30 @@ class MinesweeperMenuBar extends JMenuBar {
             public AboutDialog() {
                 super((Frame) null, "关于", true);
                 JPanel aboutPanel = new JPanel();
+                JButton github = new JButton("查看GitHub仓库");
+                ImageIcon icon = new ImageIcon("./src/Themes/Organization icon.png");
+                icon.setImage(icon.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+                JLabel iconLabel = new JLabel(icon);
+
                 aboutPanel.setLayout(new FlowLayout());
-                aboutPanel.add(new JLabel(new ImageIcon("./src/Themes/Classic/Button.png")), FlowLayout.LEFT);
-                aboutPanel.add(new JLabel("芝士一个不成熟的扫雷软件，如果发现有bug，欢迎通过提交issue或者pull request"), FlowLayout.CENTER);
+                aboutPanel.add(iconLabel, FlowLayout.LEFT);
+                aboutPanel.add(new JLabel("<html>芝士一个不成熟的扫雷软件，<br/>如果发现有bug，<br/>欢迎通过提交issue或者pull request</html>"), FlowLayout.CENTER);
+                aboutPanel.add(github, FlowLayout.RIGHT);
+
+                github.addActionListener(e1 -> {
+                    if (java.awt.Desktop.isDesktopSupported()) {
+                        try {
+                            java.net.URI uri = java.net.URI.create("https://github.com/MinesweeperRUSHHE/Minesweeper");
+                            java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+                            if (desktop.isSupported(java.awt.Desktop.Action.BROWSE)) {
+                                desktop.browse(uri);
+                            }
+                        } catch (Exception e2) {
+                            System.out.println(e2.getMessage());
+                        }
+                    }
+                });
+
                 add(aboutPanel); // 将aboutPanel添加到对话框的内容面板中
                 pack(); // 窗口自动大小
                 setLocationRelativeTo(null); //设置居中
