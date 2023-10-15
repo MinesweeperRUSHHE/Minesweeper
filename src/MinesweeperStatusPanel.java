@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -121,8 +120,8 @@ public class MinesweeperStatusPanel extends JPanel {
                 if (MinesTimerPanel.minesTimer != null) {
                     MinesTimerPanel.minesTimer.stop();
                 }
-                MinesweeperWindows.minesweeper.dispose();
-                new MinesweeperWindows().executeMinesweeper(new boolean[MinesweeperWindows.getHeight()][MinesweeperWindows.getWidth()], MinesweeperWindows.getMines());
+                Minesweeper.mw.dispose();
+                new MinesweeperWindows(Minesweeper.rows, Minesweeper.columns, Minesweeper.difficulty, Minesweeper.minesNumber);
             }
 
             @Override
@@ -155,7 +154,7 @@ public class MinesweeperStatusPanel extends JPanel {
         private final JLabel remainingMines_3; // 百位数
 
         public RemainingMinesPanel() {
-            initialMinesNumber = MinesweeperWindows.getMines();
+            initialMinesNumber = Minesweeper.minesNumber;
             minesNumber = initialMinesNumber;
 
             remainingMines_1 = new JLabel();
@@ -173,6 +172,17 @@ public class MinesweeperStatusPanel extends JPanel {
             add(remainingMines_1);
         }
 
+        public static void setMinesNumber() {
+            minesNumber = initialMinesNumber;
+            for (int i = 0; i < MinesweeperWindows.minesweeperButton.length; i++) {
+                for (int j = 0; j < MinesweeperWindows.minesweeperButton[0].length; j++) {
+                    if (MinesweeperWindows.minesweeperButton[i][j].isBelongToFlag()) {
+                        minesNumber--;
+                    }
+                }
+            }
+        }
+
         public void resetMine() {
             setLabelIcon();
         }
@@ -187,17 +197,6 @@ public class MinesweeperStatusPanel extends JPanel {
         public void removeMine() {
             minesNumber--;
             setLabelIcon();
-        }
-
-        public static void setMinesNumber() {
-            minesNumber = initialMinesNumber;
-            for (int i = 0; i < MinesweeperWindows.minesweeperButton.length; i++) {
-                for (int j = 0; j < MinesweeperWindows.minesweeperButton[0].length; j++) {
-                    if (MinesweeperWindows.minesweeperButton[i][j].isBelongToFlag()) {
-                        minesNumber--;
-                    }
-                }
-            }
         }
 
         public void setLabelIcon() {

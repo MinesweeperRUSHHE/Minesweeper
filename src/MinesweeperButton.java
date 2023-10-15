@@ -11,11 +11,6 @@ public class MinesweeperButton extends JButton {
     public boolean leftClickable = true;
     public boolean rightClickable = true;
     private boolean canFlag = true;
-
-    public void setBelongToFlag(boolean belongToFlag) {
-        this.belongToFlag = belongToFlag;
-    }
-
     private boolean belongToFlag = false;
     private boolean belongToQuestion = false;
     private boolean bothPressed = false;
@@ -96,14 +91,14 @@ public class MinesweeperButton extends JButton {
 
         }
     };
-    public MinesweeperButton(int xLocation, int yLocation, boolean[][] status) {
+    public MinesweeperButton(int rows, int columns, boolean[][] status) {
         //设置按钮的尺寸及图标
         ImageIcon imageIcon = new ImageIcon("./src/Themes/Classic/Button.png");
         setPreferredSize(new Dimension(imageIcon.getIconHeight(), imageIcon.getIconWidth()));
         setIcon(imageIcon);
         //传入按钮的xy坐标，记录按钮位置
-        this.xLocation = xLocation;
-        this.yLocation = yLocation;
+        this.xLocation = columns;
+        this.yLocation = rows;
         if (status[yLocation][xLocation]) {
             this.status = -1;
         } else {
@@ -115,6 +110,10 @@ public class MinesweeperButton extends JButton {
 
     public boolean isBelongToFlag() {
         return belongToFlag;
+    }
+
+    public void setBelongToFlag(boolean belongToFlag) {
+        this.belongToFlag = belongToFlag;
     }
 
     public boolean isMinesVisible() {

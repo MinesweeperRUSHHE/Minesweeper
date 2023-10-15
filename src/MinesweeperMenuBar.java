@@ -52,9 +52,9 @@ class MinesweeperMenuBar extends JMenuBar {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                     }
                     //关闭原窗口
-                    MinesweeperWindows.minesweeper.dispose();
+                    Minesweeper.mw.dispose();
                     //打开新窗口
-                    new MinesweeperWindows().executeMinesweeper(new boolean[MinesweeperWindows.getHeight()][MinesweeperWindows.getWidth()], MinesweeperWindows.getMines());
+                    new MinesweeperWindows(Minesweeper.rows, Minesweeper.columns, Minesweeper.difficulty, Minesweeper.minesNumber);
                 }
             }
             menuItem1_5.addActionListener(new Item1_5Listener());
@@ -67,13 +67,14 @@ class MinesweeperMenuBar extends JMenuBar {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                     }
                     //关闭原窗口
-                    MinesweeperWindows.minesweeper.dispose();
+                    Minesweeper.mw.dispose();
                     //修改数据
-                    MinesweeperWindows.height = 9;
-                    MinesweeperWindows.width = 9;
-                    MinesweeperWindows.mines = 10;
+                    Minesweeper.rows = 9;
+                    Minesweeper.columns = 9;
+                    Minesweeper.difficulty = 0;
+                    Minesweeper.minesNumber = 10;
                     //打开新窗口
-                    new MinesweeperWindows().executeMinesweeper(new boolean[MinesweeperWindows.height][MinesweeperWindows.width], MinesweeperWindows.mines);
+                    new MinesweeperWindows(9, 9, 0, 10);
                 }
             }
             menuItem1_1.addActionListener(new Item1_1Listener());
@@ -86,13 +87,14 @@ class MinesweeperMenuBar extends JMenuBar {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                     }
                     //关闭原窗口
-                    MinesweeperWindows.minesweeper.dispose();
+                    Minesweeper.mw.dispose();
                     //修改数据
-                    MinesweeperWindows.height = 16;
-                    MinesweeperWindows.width = 16;
-                    MinesweeperWindows.mines = 40;
+                    Minesweeper.rows = 16;
+                    Minesweeper.columns = 16;
+                    Minesweeper.difficulty = 1;
+                    Minesweeper.minesNumber = 40;
                     //打开新窗口
-                    new MinesweeperWindows().executeMinesweeper(new boolean[MinesweeperWindows.height][MinesweeperWindows.width], MinesweeperWindows.mines);
+                    new MinesweeperWindows(16, 16, 1, 40);
                 }
             }
             menuItem1_2.addActionListener(new Item1_2Listener());
@@ -105,13 +107,14 @@ class MinesweeperMenuBar extends JMenuBar {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                     }
                     //关闭原窗口
-                    MinesweeperWindows.minesweeper.dispose();
+                    Minesweeper.mw.dispose();
                     //修改数据
-                    MinesweeperWindows.height = 16;
-                    MinesweeperWindows.width = 30;
-                    MinesweeperWindows.mines = 99;
+                    Minesweeper.rows = 16;
+                    Minesweeper.columns = 30;
+                    Minesweeper.difficulty = 2;
+                    Minesweeper.minesNumber = 99;
                     //打开新窗口
-                    new MinesweeperWindows().executeMinesweeper(new boolean[MinesweeperWindows.height][MinesweeperWindows.width], MinesweeperWindows.mines);
+                    new MinesweeperWindows(16, 30, 2, 99);
                 }
             }
             menuItem1_3.addActionListener(new Item1_3Listener());
@@ -123,10 +126,11 @@ class MinesweeperMenuBar extends JMenuBar {
                         MinesweeperStatusPanel.MinesTimerPanel.minesTimer.stop();
                     }
                     //关闭原窗口
-                    MinesweeperWindows.minesweeper.dispose();
+                    Minesweeper.mw.dispose();
                     //打开新窗口
-                    MinesweeperWindows.CustomDifficulty customDifficulty = new MinesweeperWindows.CustomDifficulty();
-                    new MinesweeperWindows().executeMinesweeper(new boolean[customDifficulty.getHeight()][customDifficulty.getWidth()], customDifficulty.getMines());
+                    new Minesweeper.DifficultyChoice.CustomDifficulty();
+                    Minesweeper.difficulty = 3;
+                    new MinesweeperWindows(Minesweeper.rows, Minesweeper.columns, Minesweeper.difficulty, Minesweeper.minesNumber);
                 }
             }
             menuItem1_4.addActionListener(new Item1_4Listener());
@@ -140,8 +144,8 @@ class MinesweeperMenuBar extends JMenuBar {
                     }
                     //遍历所有格子，将他们设置为初始状态
                     int i, j;
-                    for (i = 0; i < MinesweeperWindows.height; i++) {
-                        for (j = 0; j < MinesweeperWindows.width; j++) {
+                    for (i = 0; i < Minesweeper.rows; i++) {
+                        for (j = 0; j < Minesweeper.columns; j++) {
                             MinesweeperWindows.minesweeperButton[i][j].setIcon(new ImageIcon("./src/Themes/Classic/Button.png"));
                             MinesweeperWindows.minesweeperButton[i][j].leftClickable = true;
                             MinesweeperWindows.minesweeperButton[i][j].rightClickable = true;
@@ -176,7 +180,6 @@ class MinesweeperMenuBar extends JMenuBar {
             private static final String[] difficult = {"easy", "medium", "hard"};
             private static final String[] bestName = new String[3];
             private static final Properties prop = new Properties();
-            private static int time;
             private static String name;
             private static int difficulty;
             private static final int[] bestTime = new int[3];
@@ -192,7 +195,7 @@ class MinesweeperMenuBar extends JMenuBar {
 
             //查看历史数据
             static void readBestTime() throws IOException {
-                difficulty = MinesweeperWindows.difficulty;
+                difficulty = Minesweeper.difficulty;
                 //读取历史记录
                 try {
                     prop.load(new FileInputStream("bestTime.properties"));
@@ -218,7 +221,7 @@ class MinesweeperMenuBar extends JMenuBar {
             //写入新数据
             public static void writeBestTime() throws IOException {
                 readBestTime(); // 确保英雄榜文件存在
-                time = MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.seconds;
+                int time = MinesweeperStatusPanel.MinesTimerPanel.MinesTimer.seconds;
                 //将time与历史记录比较，0为初级，1为中级，2为高级
                 //如果小于历史记录，则更新
                 if (time < Integer.parseInt(prop.getProperty(difficult[difficulty] + "Time"))) {
