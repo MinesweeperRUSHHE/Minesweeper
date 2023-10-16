@@ -13,7 +13,6 @@ public class MinesweeperWindows extends JFrame {
     static int columns;
     static int rows;
     static int minesNumber; // 此为设置的地雷数
-    boolean[][] mines;
 
     public MinesweeperWindows(int rows, int columns, int difficulty, int minesNumber) {
         MinesweeperWindows.rows = rows;
@@ -21,7 +20,6 @@ public class MinesweeperWindows extends JFrame {
         MinesweeperWindows.difficulty = difficulty;
         MinesweeperWindows.minesNumber = minesNumber;
 
-        mines = new boolean[rows][columns];
         setJMenuBar(new MinesweeperMenuBar());
         setLayout(new BorderLayout()); // 设置边框布局管理器
 
@@ -30,13 +28,14 @@ public class MinesweeperWindows extends JFrame {
 
         minesPanel.setLayout(new GridLayout(rows, columns, 0, 0)); // 使用网格布局管理器管理地雷按钮
 
-        placeMines(mines, minesNumber);//在此处使用随机布雷方法
+        int[][] mineStatus = new int[rows][columns];
+        setMineStatus(mineStatus, minesNumber);//在此处使用随机布雷方法
         minesweeperButton = new MinesweeperButton[rows][columns];
 
         //将地雷按钮添加到一个网格panel里
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                minesweeperButton[i][j] = new MinesweeperButton(i, j, mines);
+                minesweeperButton[i][j] = new MinesweeperButton(i, j, mineStatus[i][j]);
                 minesPanel.add(minesweeperButton[i][j]);
             }
         }
@@ -143,16 +142,34 @@ public class MinesweeperWindows extends JFrame {
         }
     }
 
-    private void placeMines(boolean[][] mines, int numbers) {
+    private void setMineStatus(int[][] mines, int minesNumbers) {
         Random random = new Random();
-        while (numbers > 0) {
+        while (minesNumbers > 0) {
             //随机产生雷所在行、所在列
             int rows = random.nextInt(mines.length);
             int columns = random.nextInt(mines[0].length);
             //判断当前雷是否有重复，没有就安雷
-            if (!mines[rows][columns]) {
-                mines[rows][columns] = true;
-                numbers -= 1;
+            if (mines[rows][columns] != -1) {
+                mines[rows][columns] = -1;
+                minesNumbers -= 1;
+            }
+        }
+        //外层循环，遍历所有格子
+        for (int i = 0; i < mines.length; i++) {
+            for (int j = 0; j < mines[0].length; j++) {
+                if (mines[i][j] != -1) {
+                    //计数器
+                    int numbers = 0;
+                    //内层循环，计算附近的地雷
+                    for (int k = Math.max(0, i - 1); k <= Math.min(mines.length - 1, i + 1); k++) {
+                        for (int l = Math.max(0, j - 1); l <= Math.min(mines[0].length - 1, j + 1); l++) {
+                            if (mines[k][l] == -1) {
+                                numbers++;
+                            }
+                        }
+                    }
+                    mines[i][j] = numbers;
+                }
             }
         }
     }

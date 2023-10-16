@@ -93,7 +93,8 @@ public class MinesweeperButton extends JButton {
 
         }
     };
-    public MinesweeperButton(int rows, int columns, boolean[][] status) {
+
+    public MinesweeperButton(int rows, int columns, int status) {
         //设置按钮的尺寸及图标
         ImageIcon imageIcon = new ImageIcon("./src/Themes/Classic/Button.png");
         setPreferredSize(new Dimension(imageIcon.getIconHeight(), imageIcon.getIconWidth()));
@@ -101,11 +102,7 @@ public class MinesweeperButton extends JButton {
         //传入按钮的xy坐标，记录按钮位置
         this.xLocation = columns;
         this.yLocation = rows;
-        if (status[yLocation][xLocation]) {
-            this.status = -1;
-        } else {
-            this.status = calculateNearbyMines(status);
-        }
+        this.status = status;
         //添加按钮的点击事件，可以根据自己的逻辑来实现
         addMouseListener(mouseListener);
     }
@@ -128,21 +125,6 @@ public class MinesweeperButton extends JButton {
 
     public void setCanFlag(boolean canFlag) {
         this.canFlag = canFlag;
-    }
-
-    //计算周围雷的数量的方法
-    private int calculateNearbyMines(boolean[][] mines) {
-        //计数器
-        int numbers = 0;
-        //计算九宫格内的地雷数量
-        for (int i = Math.max(0, yLocation - 1); i <= Math.min(mines.length - 1, yLocation + 1); i++) {
-            for (int j = Math.max(0, xLocation - 1); j <= Math.min(mines[0].length - 1, xLocation + 1); j++) {
-                if (mines[i][j]) {
-                    numbers++;
-                }
-            }
-        }
-        return numbers;
     }
 
     public int getStatus() {

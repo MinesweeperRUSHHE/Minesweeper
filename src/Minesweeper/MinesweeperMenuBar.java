@@ -178,13 +178,14 @@ class MinesweeperMenuBar extends JMenuBar {
             }
             menuItem1_7.addActionListener(new Item1_7Listener());
         }
+
         static class BestTimes {
             private static final String[] difficult = {"easy", "medium", "hard"};
             private static final String[] bestName = new String[3];
             private static final Properties prop = new Properties();
+            private static final int[] bestTime = new int[3];
             private static String name;
             private static int difficulty;
-            private static final int[] bestTime = new int[3];
 
             public BestTimes() throws IOException {
                 readBestTime();
