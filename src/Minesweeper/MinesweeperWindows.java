@@ -80,8 +80,7 @@ public class MinesweeperWindows extends JFrame {
                 if (minesweeperButton[i][j].getStatus() == 0 && !minesweeperButton[i][j].isMinesVisible() && !(i == yLocation && j == xLocation)) {
                     openAllCell(j, i);
                 } else if (minesweeperButton[i][j].getStatus() > 0) {
-                    minesweeperButton[i][j].setButtonIcon();
-                    minesweeperButton[i][j].setMinesVisible(true);
+                    minesweeperButton[i][j].clickButton();
                 }
             }
         }
