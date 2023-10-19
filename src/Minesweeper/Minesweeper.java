@@ -1,6 +1,7 @@
 package Minesweeper;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Minesweeper {
     static MinesweeperWindows mw;
@@ -10,21 +11,20 @@ public class Minesweeper {
     static int difficulty;
 
     public static void main(String[] args) {
-        new DifficultyChoice().executeDifficultChoice();
-        mw = new MinesweeperWindows(rows, columns, difficulty, minesNumber);
+        SwingUtilities.invokeLater(() -> {
+            new DifficultyChoice();
+            mw = new MinesweeperWindows(rows, columns, difficulty, minesNumber);
+        });
     }
 
+
     static class DifficultyChoice {
-
-        //存储对话框的选项按钮
-        private final Object[] options = {"低级", "中级", "高级", "自定义"};
-
-        public void executeDifficultChoice() {
-        /*
-        choice [0,1,2,3]分别对应"低级", "中级", "高级", "自定义"
-        初级为10个，中级为40个，高级为99个
-         */
-            switch (new Minesweeper.DifficultyChoice().getDifficulty()) {
+        public DifficultyChoice() {
+            /*
+            choice [0,1,2,3]分别对应"低级", "中级", "高级", "自定义"
+            初级为10个，中级为40个，高级为99个
+            */
+            switch (getDifficulty()) {
                 case 0 -> {
                     difficulty = 0;
                     rows = 9;
@@ -51,70 +51,81 @@ public class Minesweeper {
             }
         }
 
-        public int getDifficulty() {
-            //调用showOptionDialog方法，创建一个选项对话框
+        private int getDifficulty() {
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // 指定其布局为BoxLayout，并设置其方向为垂直
+            //创建一个ButtonGroup对象，用于将JRadioButtons分组
+            ButtonGroup group = new ButtonGroup();
+            String[] options = {"初级", "中级", "高级", "自定义"};
+            JRadioButton[] buttons = new JRadioButton[options.length];
+            //遍历数组，为每个选项创建一个JRadioButton，并添加到panel和group中
+            for (int i = 0; i < options.length; i++) {
+                buttons[i] = new JRadioButton(options[i]);
+                panel.add(buttons[i]);
+                group.add(buttons[i]);
+            }
+            buttons[0].setSelected(true);
             //存储用户的选择
-            int choice = JOptionPane.showOptionDialog(null, "请选择游戏难度", "选项对话框", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+            int choice = JOptionPane.showConfirmDialog(null, panel, "请选择游戏难度", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
             //根据返回值判断用户的选择
-            if (choice == -1) {
-                //用户关闭了对话框
+            if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) {
+                //用户取消了对话框或关闭了对话框
                 JOptionPane.showMessageDialog(null, "您没有选择难度，程序将自动关闭");
-                return -1;
+                System.exit(0);
             } else {
-                //choice [0,1,2,3]分别对应"自定义", "高级", "中级", "低级"
-                JOptionPane.showMessageDialog(null, "您选择了" + options[choice]);//暂时是给你一个窗口提示难度
-                Minesweeper.difficulty = choice;
+                //用户点击了确定按钮
+                for (int i = 0; i < buttons.length; i++) {
+                    if (buttons[i].isSelected()) {
+                        choice = i;
+                        break;
+                    }
+                }
                 return choice;//对应的上面的选项
             }
+            return -1;
         }
 
         static class CustomDifficulty {
             public CustomDifficulty() {
-                //调用showInputDialog方法获取用户输入的数据
-                String rowString = JOptionPane.showInputDialog(null, "请输入行数");
-                while (checkCustomNumbers(rowString)) {
-                    rowString = reEnterNumbers();
-                }//调用Integer方法把数据转换为整数
-                rows = Integer.parseInt(rowString);
-
-                String columnString = JOptionPane.showInputDialog(null, "请输入列数");
-                while (checkCustomNumbers(columnString)) {
-                    columnString = reEnterNumbers();
+                //创建一个JPanel对象，用于放置三个JTextField
+                JPanel panel = new JPanel(new GridLayout(3, 2));
+                String[] labels = {"请输入行数", "请输入列数", "请输入雷数"};
+                JTextField[] fields = new JTextField[labels.length];
+                for (int i = 0; i < labels.length; i++) {
+                    panel.add(new JLabel(labels[i]));
+                    fields[i] = new JTextField(10);
+                    panel.add(fields[i]);
                 }
-                columns = Integer.parseInt(columnString);
-
-                String mineString = JOptionPane.showInputDialog(null, "请输入雷数");
-                while (checkCustomNumbers(mineString)) {
-                    mineString = reEnterNumbers();
-                }
-                minesNumber = Integer.parseInt(mineString);
-            }
-
-            private boolean checkCustomNumbers(String number) {
-                //检查用户操作和判断输入数据
-                if (number == null) {
-                    //用户关闭或取消了对话框
-                    JOptionPane.showMessageDialog(null, "你取消了自定义");
-                    //TODO:重新回到难度选择
-                    System.exit(0);
-                    return false;
+                //存储用户的选择
+                int choice = JOptionPane.showConfirmDialog(null, panel, "自定义难度", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                //根据返回值判断用户的选择
+                if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) {
+                    new DifficultyChoice();
                 } else {
-                    try {
-                        //判断输入的是否为整数
-                        Integer.parseInt(number);
-                        //判断整数的大小是否符合要求
-                        return 8 > Integer.parseInt(number) || Integer.parseInt(number) > 30;
-                    } catch (Exception e) {
-                        //不是整数
-                        return true;
+                    //用户点击了确定按钮
+                    //获取用户输入的数据，并转换为整数
+                    int rows = Integer.parseInt(fields[0].getText());
+                    int columns = Integer.parseInt(fields[1].getText());
+                    int minesNumber = Integer.parseInt(fields[2].getText());
+                    //检查用户输入的数据是否符合要求
+                    if (checkCustomNumbers(rows) && checkCustomNumbers(columns) && checkCustomNumbers(minesNumber)) {
+                        //数据符合要求，设置相应的属性值
+                        Minesweeper.rows = rows;
+                        Minesweeper.columns = columns;
+                        Minesweeper.minesNumber = minesNumber;
+                        Minesweeper.difficulty = 3;
+                        JOptionPane.showMessageDialog(null, "您选择了自定义难度");//暂时是给你一个窗口提示难度
+                    } else {
+                        //数据不符合要求，发出警告并要求重新输入
+                        JOptionPane.showMessageDialog(null, "请输入9~30的整数", "WARNING", JOptionPane.WARNING_MESSAGE);
+                        new CustomDifficulty(); // 重新输入
                     }
                 }
             }
 
-            private String reEnterNumbers() {
-                //如果输入的不是符合要求的整数，发出警告并要求重新输入
-                JOptionPane.showMessageDialog(null, "请输入9~30的整数", "WARNING", JOptionPane.WARNING_MESSAGE);
-                return JOptionPane.showInputDialog(null, "请重新输入");
+            private boolean checkCustomNumbers(int number) {
+                //判断整数的大小是否符合要求
+                return 8 < number && number < 31;
             }
         }
     }
