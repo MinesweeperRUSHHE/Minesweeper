@@ -76,7 +76,7 @@ class MinesweeperMenuBar extends JMenuBar {
                     Minesweeper.difficulty = 0;
                     Minesweeper.minesNumber = 10;
                     //打开新窗口
-                    new MinesweeperWindows(9, 9, 0, 10);
+                    Minesweeper.mw = new MinesweeperWindows(9, 9, 0, 10);
                 }
             }
             menuItem1_1.addActionListener(new Item1_1Listener());
@@ -96,7 +96,7 @@ class MinesweeperMenuBar extends JMenuBar {
                     Minesweeper.difficulty = 1;
                     Minesweeper.minesNumber = 40;
                     //打开新窗口
-                    new MinesweeperWindows(16, 16, 1, 40);
+                    Minesweeper.mw = new MinesweeperWindows(16, 16, 1, 40);
                 }
             }
             menuItem1_2.addActionListener(new Item1_2Listener());
@@ -116,7 +116,7 @@ class MinesweeperMenuBar extends JMenuBar {
                     Minesweeper.difficulty = 2;
                     Minesweeper.minesNumber = 99;
                     //打开新窗口
-                    new MinesweeperWindows(16, 30, 2, 99);
+                    Minesweeper.mw = new MinesweeperWindows(16, 30, 2, 99);
                 }
             }
             menuItem1_3.addActionListener(new Item1_3Listener());
@@ -132,7 +132,7 @@ class MinesweeperMenuBar extends JMenuBar {
                     //打开新窗口
                     new Minesweeper.DifficultyChoice.CustomDifficulty();
                     Minesweeper.difficulty = 3;
-                    new MinesweeperWindows(Minesweeper.rows, Minesweeper.columns, Minesweeper.difficulty, Minesweeper.minesNumber);
+                    Minesweeper.mw = new MinesweeperWindows(Minesweeper.rows, Minesweeper.columns, Minesweeper.difficulty, Minesweeper.minesNumber);
                 }
             }
             menuItem1_4.addActionListener(new Item1_4Listener());
