@@ -123,7 +123,7 @@ public class MinesweeperStatusPanel extends JPanel {
                     MinesTimerPanel.minesTimer.stop();
                 }
                 Minesweeper.mw.dispose();
-                new MinesweeperWindows(Minesweeper.rows, Minesweeper.columns, Minesweeper.difficulty, Minesweeper.minesNumber);
+                Minesweeper.mw = new MinesweeperWindows(Minesweeper.rows, Minesweeper.columns, Minesweeper.difficulty, Minesweeper.minesNumber);
             }
 
             @Override
@@ -183,10 +183,6 @@ public class MinesweeperStatusPanel extends JPanel {
                     }
                 }
             }
-        }
-
-        public void resetMine() {
-            setLabelIcon();
         }
 
         //增加显示地雷数量的方法
