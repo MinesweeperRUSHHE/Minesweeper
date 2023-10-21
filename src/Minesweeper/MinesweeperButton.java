@@ -2,8 +2,8 @@ package Minesweeper;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.IOException;
 
 public class MinesweeperButton extends JButton {
@@ -17,12 +17,7 @@ public class MinesweeperButton extends JButton {
     private boolean belongToQuestion = false;
     private boolean bothPressed = false;
     private boolean minesVisible = false;//false为不可见，true为可见
-    MouseListener mouseListener = new MouseListener() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-
-        }
-
+    MouseAdapter mouseAdapter = new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
             // 定义一个掩码，表示同时按下鼠标左键和右键
@@ -82,16 +77,6 @@ public class MinesweeperButton extends JButton {
                 MinesweeperStatusPanel.faceButton.setIcon(new ImageIcon("./src/Themes/Classic/Face_smile.png"));
             }
         }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-
-        }
     };
 
     public MinesweeperButton(int rows, int columns, int status) {
@@ -104,7 +89,7 @@ public class MinesweeperButton extends JButton {
         this.yLocation = rows;
         this.status = status;
         //添加按钮的点击事件，可以根据自己的逻辑来实现
-        addMouseListener(mouseListener);
+        addMouseListener(mouseAdapter);
     }
 
     public boolean isBelongToFlag() {

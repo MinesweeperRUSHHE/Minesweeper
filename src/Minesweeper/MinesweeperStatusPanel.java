@@ -2,8 +2,8 @@ package Minesweeper;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -115,7 +115,7 @@ public class MinesweeperStatusPanel extends JPanel {
         }
 
         //笑脸按钮鼠标监听器
-        class FaceButtonListener implements MouseListener {
+        class FaceButtonListener extends MouseAdapter {
             //点击时重新开始游戏
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -134,16 +134,6 @@ public class MinesweeperStatusPanel extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 setIcon(new ImageIcon("./src/Themes/Classic/Face_smile.png"));
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
             }
         }
     }
