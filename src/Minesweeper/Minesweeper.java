@@ -17,7 +17,6 @@ public class Minesweeper {
         });
     }
 
-
     static class DifficultyChoice {
         public DifficultyChoice() {
             /*

@@ -7,20 +7,16 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class MinesweeperWindows extends JFrame {
-    public static int difficulty;
-    //定义三种难度的历史记录1为低级，3为高级
-    static MinesweeperButton[][] minesweeperButton;
-    static int columns;
-    static int rows;
-    static int minesNumber; // 此为设置的地雷数
+    //0, 1, 2, 3分别对应"低级", "中级", "高级", "自定义"
+    private static int difficulty;
+    public static MinesweeperButton[][] minesweeperButton;
+    private static int minesNumber; // 此为设置的地雷数
 
     public MinesweeperWindows(int rows, int columns, int difficulty, int minesNumber) {
-        MinesweeperWindows.rows = rows;
-        MinesweeperWindows.columns = columns;
         MinesweeperWindows.difficulty = difficulty;
         MinesweeperWindows.minesNumber = minesNumber;
 
-        setJMenuBar(new MinesweeperMenuBar());
+        setJMenuBar(new MinesweeperMenuBar()); // 添加菜单栏
         setLayout(new BorderLayout()); // 设置边框布局管理器
 
         MinesweeperStatusPanel statusPanel = new MinesweeperStatusPanel(); // 显示状态的面板
@@ -29,7 +25,7 @@ public class MinesweeperWindows extends JFrame {
         minesPanel.setLayout(new GridLayout(rows, columns, 0, 0)); // 使用网格布局管理器管理地雷按钮
 
         int[][] mineStatus = new int[rows][columns];
-        setMineStatus(mineStatus, minesNumber);//在此处使用随机布雷方法
+        setMineStatus(mineStatus, minesNumber); // 在此处使用随机布雷方法，确定地雷位置
         minesweeperButton = new MinesweeperButton[rows][columns];
 
         //将地雷按钮添加到一个网格panel里
