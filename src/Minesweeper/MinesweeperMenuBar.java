@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 class MinesweeperMenuBar extends JMenuBar {
@@ -145,15 +147,14 @@ class MinesweeperMenuBar extends JMenuBar {
             //英雄榜
             bestTime.addActionListener(arg0 -> {
                 try {
-                    BestTimes.readBestTime();
+                    new BestTimes().setVisible(true);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                JOptionPane.showMessageDialog(null, "\n初级：" + BestTimes.bestTime[0] + "秒                   " + BestTimes.bestName[0] + "\n中级：" + BestTimes.bestTime[1] + "秒                   " + BestTimes.bestName[1] + "\n高级：" + BestTimes.bestTime[2] + "秒                   " + BestTimes.bestName[2], "扫雷英雄榜", JOptionPane.PLAIN_MESSAGE);
             });
         }
 
-        static class BestTimes {
+        static class BestTimes extends JDialog {
             private static final String[] difficult = {"easy", "medium", "hard"};
             private static final String[] bestName = new String[3];
             private static final Properties prop = new Properties();
@@ -163,6 +164,28 @@ class MinesweeperMenuBar extends JMenuBar {
 
             public BestTimes() throws IOException {
                 readBestTime();
+                JPanel panel = new JPanel();
+                panel.setLayout(new GridLayout(3, 2, 10, 0));
+
+                panel.add(new JLabel("初级：" + BestTimes.bestTime[0] + "秒"));
+                panel.add(new JLabel(BestTimes.bestName[0]));
+                panel.add(new JLabel("中级：" + BestTimes.bestTime[1] + "秒"));
+                panel.add(new JLabel(BestTimes.bestName[1]));
+                panel.add(new JLabel("高级：" + BestTimes.bestTime[2] + "秒"));
+                panel.add(new JLabel(BestTimes.bestName[2]));
+
+                // 放置重新记分和确定的panel
+                JPanel buttonPanel = new JPanel();
+                buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+                buttonPanel.add(addResetButton());
+                buttonPanel.add(addOkButton());
+
+                getContentPane().add(panel, BorderLayout.EAST);
+                getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+
+                setModal(true); // 设置模态
+                pack(); // 自动大小
+                setLocationRelativeTo(Minesweeper.mw); // 位置在主窗口处
             }
 
             public static void recordBestTime() {
@@ -208,6 +231,29 @@ class MinesweeperMenuBar extends JMenuBar {
                     prop.setProperty(difficult[difficulty] + "Name", name);
                     prop.store(new FileOutputStream("bestTime.properties"), null);
                 }
+            }
+
+            private JButton addResetButton() {
+                JButton reset = new JButton("重新记分");
+                reset.addActionListener(e -> {
+                    // 关闭英雄榜
+                    dispose();
+                    try {
+                        Files.delete(Paths.get("./bestTime.properties")); // 删除英雄榜
+                        readBestTime(); // 读取（英雄榜文件不存在的时候会自动创建）
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    setVisible(true); // 重新开启
+                });
+                return reset;
+            }
+
+            private JButton addOkButton() {
+                JButton okButton = new JButton("确定");
+                // 为确定按钮添加事件监听器
+                okButton.addActionListener(e -> dispose()); // 关闭英雄榜
+                return okButton;
             }
         }
     }
