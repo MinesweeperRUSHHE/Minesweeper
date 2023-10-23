@@ -241,10 +241,10 @@ class MinesweeperMenuBar extends JMenuBar {
                     try {
                         Files.delete(Paths.get("./bestTime.properties")); // 删除英雄榜
                         readBestTime(); // 读取（英雄榜文件不存在的时候会自动创建）
+                        new BestTimes().setVisible(true); // 重新开启
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
-                    setVisible(true); // 重新开启
                 });
                 return reset;
             }
