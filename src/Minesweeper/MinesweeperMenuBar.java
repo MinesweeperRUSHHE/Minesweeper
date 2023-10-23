@@ -238,13 +238,19 @@ class MinesweeperMenuBar extends JMenuBar {
                 reset.addActionListener(e -> {
                     // 关闭英雄榜
                     dispose();
+                    //修改配置文件
+                    prop.setProperty("easyName", "匿名");
+                    prop.setProperty("mediumName", "匿名");
+                    prop.setProperty("hardName", "匿名");
+                    prop.setProperty("easyTime", "999");
+                    prop.setProperty("mediumTime", "999");
+                    prop.setProperty("hardTime", "999");
                     try {
-                        Files.delete(Paths.get("./bestTime.properties")); // 删除英雄榜
-                        readBestTime(); // 读取（英雄榜文件不存在的时候会自动创建）
+                        prop.store(new FileOutputStream("bestTime.properties"), null);
+                        new BestTimes().setVisible(true);
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
-                    setVisible(true); // 重新开启
                 });
                 return reset;
             }
