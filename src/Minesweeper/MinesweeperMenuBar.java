@@ -6,8 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Properties;
 
 class MinesweeperMenuBar extends JMenuBar {
@@ -195,7 +193,7 @@ class MinesweeperMenuBar extends JMenuBar {
             }
 
             //查看历史数据
-            static void readBestTime() throws IOException {
+            public static void readBestTime() throws IOException {
                 difficulty = Minesweeper.difficulty;
                 //读取历史记录
                 try {
