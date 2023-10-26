@@ -15,7 +15,7 @@ public class MinesweeperButton extends JButton {
     private boolean canFlag = true; // 是否可插旗
     private boolean belongToFlag = false; // 是否属于旗子
     private boolean belongToQuestion = false; // 是否属于问号
-    private boolean bothPressed = false; // 按钮是否可被左右键点击
+    private boolean bothPressed = false; // 按钮是否被左右键点击
     private boolean minesVisible = false;//false为不可见，true为可见
     MouseAdapter mouseAdapter = new MouseAdapter() {
         @Override
@@ -24,8 +24,6 @@ public class MinesweeperButton extends JButton {
             int action = MouseEvent.BUTTON1_DOWN_MASK | MouseEvent.BUTTON3_DOWN_MASK;
             // 判断鼠标事件的修饰符是否与掩码相同
             if ((e.getModifiersEx() & action) == action) {
-                // 如果相同，就执行你想要的操作
-                System.out.println("同时按下了左键和右键");
                 if (minesVisible && status > 0) {
                     MinesweeperWindows.executeDoubleClick(xLocation, yLocation);
                 }

@@ -266,17 +266,17 @@ class MinesweeperMenuBar extends JMenuBar {
         public MinesweeperMenuHelp(String name) {
             super(name);
 
-            JMenuItem menuItem2_1 = new JMenuItem("关于");
+            JMenuItem about = new JMenuItem("关于");
 
-            add(menuItem2_1);
+            add(about);
 
             //为菜单项添加事件监听器
-            menuItem2_1.addActionListener(arg0 -> new AboutDialog().setVisible(true));
+            about.addActionListener(arg0 -> new AboutDialog().setVisible(true));
         }
 
         static class AboutDialog extends JDialog {
             public AboutDialog() {
-                super((Frame) null, "关于", true);
+                super(Minesweeper.mw, "关于", true);
                 JPanel aboutPanel = new JPanel();
                 JButton github = new JButton("查看GitHub仓库");
                 ImageIcon icon = new ImageIcon("./src/Themes/Organization icon.png");
